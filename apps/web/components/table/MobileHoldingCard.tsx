@@ -9,6 +9,7 @@ import {
   formatQuantity,
   type HoldingRow,
 } from '@portfolio/shared';
+import { CompanyLogo } from './CompanyLogo';
 import { GainLossCell } from './GainLossCell';
 import { PriceCell } from './PriceCell';
 
@@ -25,7 +26,8 @@ function MobileHoldingCardBase({ holding }: { holding: HoldingRow }) {
   return (
     <article className="card px-4 py-3">
       <header className="flex items-start justify-between gap-3 border-b border-rule pb-2">
-        <div className="flex min-w-0 flex-col">
+        <CompanyLogo holdingId={holding.id} name={holding.name} />
+        <div className="flex min-w-0 flex-1 flex-col">
           <span className="truncate text-sm font-semibold">{holding.name}</span>
           <span className="numeric text-[0.7rem] text-ink-faint">
             {holding.exchangeCode} · {holding.exchange}

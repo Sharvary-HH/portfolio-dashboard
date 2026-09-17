@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Prompt, Unica_One } from 'next/font/google';
+import { Amethysta, Prompt } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
 import './globals.css';
 
@@ -9,10 +9,10 @@ const prompt = Prompt({
   variable: '--font-prompt',
 });
 
-const unicaOne = Unica_One({
+const amethysta = Amethysta({
   subsets: ['latin'],
   weight: ['400'],
-  variable: '--font-unica',
+  variable: '--font-amethysta',
 });
 
 export const metadata: Metadata = {
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${prompt.variable} ${unicaOne.variable} font-sans antialiased`}>
+      <body className={`${prompt.variable} ${amethysta.variable} font-sans antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
         </ThemeProvider>

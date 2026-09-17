@@ -13,7 +13,7 @@ import {
   type HoldingRow as Holding,
 } from '@portfolio/shared';
 import { Button } from '@/components/ui/Button';
-import { TickerAvatar } from '@/components/table/TickerAvatar';
+import { CompanyLogo } from '@/components/table/CompanyLogo';
 import { statusLabel } from '@/components/ui/StaleBadge';
 import { cn } from '@/lib/cn';
 
@@ -66,7 +66,7 @@ export function HoldingDetailPanel({
   return (
     <aside className="card flex h-fit flex-col gap-4 p-5 xl:sticky xl:top-20">
       <div className="flex items-start gap-3">
-        <TickerAvatar name={holding.name} className="size-10 text-xs" />
+        <CompanyLogo holdingId={holding.id} name={holding.name} size={40} />
         <div className="min-w-0 flex-1">
           <h2 className="font-display text-base tracking-wide">{holding.name}</h2>
           <p className="numeric text-xs text-ink-faint">

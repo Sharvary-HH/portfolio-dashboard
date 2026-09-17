@@ -66,9 +66,9 @@ export function Sidebar({ active, onSelect, totalValue, holdingCount }: SidebarP
         })}
       </nav>
 
-      <div className="mt-auto flex items-start gap-2 rounded-2xl bg-white/5 px-3 py-3 text-[0.7rem] leading-relaxed text-rail-ink">
-        <Layers aria-hidden className="mt-0.5 size-3.5 shrink-0" />
-        <p>Prices from Yahoo Finance, fundamentals from Google Finance. Not investment advice.</p>
+      <div className="mt-auto flex items-center gap-2 rounded-2xl bg-white/5 px-3 py-2.5 text-[0.7rem] text-rail-ink">
+        <Layers aria-hidden className="size-3.5 shrink-0" />
+        <p>Yahoo Finance · Google Finance</p>
       </div>
     </aside>
   );

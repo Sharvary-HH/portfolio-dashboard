@@ -4,8 +4,8 @@ export const SECTOR_RAMP = {
 } as const;
 
 export const CHART_INK = {
-  light: { axis: '#6f6157', grid: '#e8dcd7', surface: '#ffffff', gain: '#4e6853', loss: '#b04e60' },
-  dark: { axis: '#b9a99d', grid: '#3b3129', surface: '#241d18', gain: '#a2ae9d', loss: '#e4909c' },
+  light: { axis: '#6f6157', grid: '#e8dcd7', surface: '#ffffff', gain: '#137333', loss: '#c0271d' },
+  dark: { axis: '#b9a99d', grid: '#3b3129', surface: '#241d18', gain: '#4ade80', loss: '#f87171' },
 } as const;
 
 export type ChartMode = keyof typeof SECTOR_RAMP;

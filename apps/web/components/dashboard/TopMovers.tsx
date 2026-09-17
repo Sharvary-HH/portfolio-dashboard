@@ -3,7 +3,7 @@
 import { memo, useMemo } from 'react';
 import { TrendingDown, TrendingUp } from 'lucide-react';
 import { formatCurrency, formatSignedPercent, type HoldingRow as Holding } from '@portfolio/shared';
-import { TickerAvatar } from '@/components/table/TickerAvatar';
+import { CompanyLogo } from '@/components/table/CompanyLogo';
 import { cn } from '@/lib/cn';
 
 interface TopMoversProps {
@@ -49,7 +49,7 @@ function MoverList({
                 onClick={() => onSelect(row.id)}
                 className="flex w-full items-center gap-2.5 rounded-xl px-2 py-1.5 text-left hover:bg-muted"
               >
-                <TickerAvatar name={row.name} />
+                <CompanyLogo holdingId={row.id} name={row.name} />
                 <span className="min-w-0 flex-1">
                   <span className="block truncate text-sm">{row.name}</span>
                   <span className="numeric block text-[0.7rem] text-ink-faint">

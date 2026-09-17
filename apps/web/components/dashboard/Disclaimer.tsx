@@ -2,11 +2,10 @@ export function Disclaimer() {
   return (
     <footer className="pt-2 text-xs leading-relaxed text-ink-faint">
       <p>
-        Prices come from Yahoo Finance and fundamentals from Google Finance. Neither publishes an
-        official API, so values may be delayed, incomplete or occasionally wrong, and a source can
-        stop answering without notice.
+        Neither source publishes an official API, so figures can lag the exchange, arrive incomplete
+        or stop arriving altogether. Treat them as an indication, not a statement of account, and
+        check anything you plan to act on.
       </p>
-      <p className="mt-1">This dashboard is for tracking only. It is not investment advice.</p>
     </footer>
   );
 }

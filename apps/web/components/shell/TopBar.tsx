@@ -1,10 +1,11 @@
 'use client';
 
 import { Pause, Play, RotateCw, Search } from 'lucide-react';
-import { formatClockTime, type PortfolioResponse } from '@portfolio/shared';
+import type { PortfolioResponse } from '@portfolio/shared';
 import { Button } from '@/components/ui/Button';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { MarketStatusBadge } from '@/components/dashboard/MarketStatusBadge';
+import { LiveClock } from './LiveClock';
 import { cn } from '@/lib/cn';
 
 interface TopBarProps {
@@ -52,25 +53,15 @@ export function TopBar({
 
         <MarketStatusBadge state={meta?.marketState ?? 'UNKNOWN'} />
 
-        <span
-          aria-live="polite"
-          className="numeric hidden items-center gap-1.5 rounded-lg border border-rule bg-surface px-2.5 py-1.5 text-xs text-ink-soft md:inline-flex"
-        >
-          <span
-            aria-hidden
-            className={cn(
-              'size-1.5 rounded-full',
-              isPaused ? 'bg-ink-faint' : isRefreshing ? 'bg-accent' : 'bg-gain',
-            )}
-          />
-          {isPaused
-            ? 'Paused'
-            : isRefreshing
-              ? 'Refreshing'
-              : `Next in ${secondsUntilNextRefresh}s`}
-          <span className="text-ink-faint">·</span>
-          {formatClockTime(lastUpdated)}
-        </span>
+        <LiveClock
+          lastUpdated={lastUpdated}
+          secondsUntilNextRefresh={secondsUntilNextRefresh}
+          intervalSeconds={Math.round((meta?.refreshIntervalMs ?? 15000) / 1000)}
+          isRefreshing={isRefreshing}
+          isPaused={isPaused}
+        />
+
+        <span aria-hidden className="hidden h-6 w-px bg-rule sm:block" />
 
         <Button
           onClick={onTogglePause}

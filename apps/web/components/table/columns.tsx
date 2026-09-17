@@ -14,7 +14,7 @@ import { GainLossCell } from './GainLossCell';
 import { StaleBadge } from '@/components/ui/StaleBadge';
 import { Tooltip } from '@/components/ui/Tooltip';
 import { PriceCell } from './PriceCell';
-import { TickerAvatar } from './TickerAvatar';
+import { CompanyLogo } from './CompanyLogo';
 
 const helper = createColumnHelper<HoldingRow>();
 
@@ -24,7 +24,7 @@ export const portfolioColumns = [
     header: 'Particulars',
     cell: (info) => (
       <span className="flex items-center gap-2.5">
-        <TickerAvatar name={info.getValue()} />
+        <CompanyLogo holdingId={info.row.original.id} name={info.getValue()} />
         <span className="min-w-0">
           <span className="block truncate font-medium">{info.getValue()}</span>
           <span className="block text-[0.7rem] text-ink-faint">{info.row.original.sector}</span>

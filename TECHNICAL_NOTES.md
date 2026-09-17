@@ -164,12 +164,14 @@ so each role uses a step measured against its surface rather than the swatch its
 | Canvas / surface | `#f7f2f0` / `#ffffff` | `#191411` / `#241d18` | — |
 | Ink | `#3a302a` | `#f3ebe5` | 12.8 : 1 |
 | Brand, rail | `#54463a` | `#d8c3ae` | 9.1 : 1 |
-| Gain | `#4e6853` | `#a2ae9d` | 6.1 / 7.2 : 1 |
-| Loss | `#b04e60` | `#e4909c` | 5.1 / 6.9 : 1 |
+| Gain | `#137333` | `#4ade80` | 6.0 / 9.5 : 1 |
+| Loss | `#c0271d` | `#f87171` | 5.9 / 6.0 : 1 |
 | Accent | `#8a6a3a` | `#d9a85e` | 5.0 / 7.7 : 1 |
 
-Gain is the sage family deepened, loss the rose family deepened, and the brand is the brown, so the
-semantic colours never compete with the interface colour. Both also carry a sign and an arrow, so
+Gain and loss stay the conventional green and red — a portfolio table is the wrong place to be
+inventive, and the palette's own sage and rose read as decorative rather than directional. The warm
+family carries the interface instead (brown brand and rail, rose highlight), so the semantic colours
+never compete with it. Both also carry a sign and an arrow, so
 colour is never the only signal.
 
 **The donut is a sequential ramp, not a categorical palette.** Six warm hues from one family cannot
@@ -180,11 +182,17 @@ sectors are sorted largest first and coloured with a single-hue rose ramp
 lightness monotone, every adjacent gap ≥ 0.06, light end above the 2:1 contrast floor, hue spread
 4°. Magnitude is the encoding, and the legend names every sector with its share and return.
 
-**Type:** Unica One for headings and the wordmark; Prompt (300–600) for everything else. Prompt has
+**Type:** Amethysta for headings and the wordmark; Prompt (300–600) for everything else. Prompt has
 no `tnum` feature — measured, eight `1`s render at 57px against 107px for eight `0`s — so
 `tabular-nums` cannot hold the columns steady. Instead the holdings table is `table-fixed` with
 percentage column widths summing to 100, which pins every column so a price tick can never reflow
 the layout. Numbers are right-aligned inside those fixed cells.
+
+**Company logos** come from a verified domain per holding (`apps/web/lib/logos.ts`). Google Finance
+carries only news-source favicons, and Yahoo's profile endpoint is blocked from the deployed host, so
+each domain was confirmed by fetching the site and matching its `<title>` to the company. The logo
+itself loads from Google's favicon service, falls back to DuckDuckGo's when that 404s, and falls back
+to a coloured initials tile when neither has one — 20 of 25 resolve today.
 
 ## 10. With more time
 

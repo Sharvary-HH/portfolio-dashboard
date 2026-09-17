@@ -15,10 +15,10 @@
   --rail: #3e332b;
   --rail-ink: #c9bdb2;
   --rail-active: #c75f71;
-  --gain: #4e6853;
-  --gain-soft: #e7eee7;
-  --loss: #b04e60;
-  --loss-soft: #fbe9ea;
+  --gain: #137333;
+  --gain-soft: #e6f4ea;
+  --loss: #c0271d;
+  --loss-soft: #fce8e6;
   --accent: #8a6a3a;
   --accent-soft: #f7ecdc;
   --shadow-card: 0 1px 2px rgba(84, 70, 58, 0.06), 0 8px 24px rgba(84, 70, 58, 0.08);
@@ -37,10 +37,10 @@
   --rail: #14100d;
   --rail-ink: #b0a196;
   --rail-active: #c75f71;
-  --gain: #a2ae9d;
-  --gain-soft: #232b23;
-  --loss: #e4909c;
-  --loss-soft: #33211f;
+  --gain: #4ade80;
+  --gain-soft: #13291d;
+  --loss: #f87171;
+  --loss-soft: #301715;
   --accent: #d9a85e;
   --accent-soft: #332715;
   --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.35), 0 8px 24px rgba(0, 0, 0, 0.3);
@@ -66,7 +66,7 @@
   --color-accent: var(--accent);
   --color-accent-soft: var(--accent-soft);
   --font-sans: var(--font-prompt);
-  --font-display: var(--font-unica);
+  --font-display: var(--font-amethysta);
   --shadow-card: var(--shadow-card);
 }
 
