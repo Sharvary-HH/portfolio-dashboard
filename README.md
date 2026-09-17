@@ -5,6 +5,14 @@ sheet, pulls the current market price from Yahoo Finance and the P/E ratio and l
 earnings from Google Finance, refreshes every 15 seconds, and groups everything by sector with
 per-sector subtotals and a grand total. Gains are green, losses are red.
 
+**Live:** https://portfolio-dashboard-web-ten.vercel.app · **API:**
+https://portfolio-api-hcsi.onrender.com/api/health
+
+The deployed API runs on a free Render instance that sleeps after 15 minutes of inactivity, so the
+first load can take up to a minute. Yahoo blocks Render's IP, so prices there come from the Google
+Finance fallback and refresh every few minutes rather than every 15 seconds; the dashboard says so
+in its warnings banner. Run it locally for the full 15-second Yahoo path.
+
 ![Dashboard in light mode](docs/screenshot.png)
 
 ![Dashboard in dark mode](docs/screenshot-dark.png)
