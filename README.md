@@ -24,8 +24,11 @@ in its warnings banner. Run it locally for the full 15-second Yahoo path.
   the table or shifting the layout
 - Price cells flash green or red when the quote moves between polls
 - P/E ratio and latest quarterly earnings (EPS, period, net income in the tooltip) per holding
-- Sector allocation donut and gain/loss-by-sector bar chart
+- Sector allocation donut with a live centre readout, and a gain/loss-by-sector bar chart
+- Portfolio value chart built from a server-side ring buffer of every refresh since start-up
+- Best and worst performer lists, and a details rail with the full breakdown for any holding you pick
 - Sorting on every column, search by name or exchange code, expand/collapse all sectors
+- Sidebar shell with section switching, global search, and a sticky live-status bar
 - Stacked cards instead of a table below 768px, light and dark themes, keyboard-operable throughout
 - Degrades instead of failing: stale values are flagged per cell, warnings explain what is missing,
   and the last good data stays on screen when the API goes away

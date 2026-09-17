@@ -21,6 +21,8 @@ interface SectorGroupProps {
   columns: Column<Holding, unknown>[];
   isExpanded: boolean;
   onToggle: (sector: string) => void;
+  selectedId: string | null;
+  onSelect: (holdingId: string) => void;
 }
 
 function headerCell(
@@ -33,7 +35,7 @@ function headerCell(
   const shared = cn(
     'px-3 py-2.5 text-xs font-semibold',
     layout.align === 'left' ? 'text-left' : 'text-right numeric',
-    layout.sticky && 'sticky left-0 z-10 bg-sunken',
+    layout.sticky && 'sticky left-0 z-10 bg-muted',
   );
 
   switch (column.id) {
@@ -94,13 +96,30 @@ function headerCell(
   }
 }
 
-function SectorGroupBase({ summary, rows, columns, isExpanded, onToggle }: SectorGroupProps) {
+function SectorGroupBase({
+  summary,
+  rows,
+  columns,
+  isExpanded,
+  onToggle,
+  selectedId,
+  onSelect,
+}: SectorGroupProps) {
   return (
     <tbody className="border-b border-rule">
-      <tr className="bg-sunken">
+      <tr className="bg-muted">
         {columns.map((column) => headerCell(column, summary, isExpanded, onToggle))}
       </tr>
-      {isExpanded ? rows.map((row) => <HoldingRow key={row.id} row={row} />) : null}
+      {isExpanded
+        ? rows.map((row) => (
+            <HoldingRow
+              key={row.id}
+              row={row}
+              isSelected={row.original.id === selectedId}
+              onSelect={onSelect}
+            />
+          ))
+        : null}
     </tbody>
   );
 }

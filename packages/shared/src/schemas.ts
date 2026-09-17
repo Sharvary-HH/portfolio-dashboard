@@ -77,6 +77,12 @@ export const sectorSummarySchema = z.object({
   isPartial: z.boolean(),
 });
 
+export const historyPointSchema = z.object({
+  at: z.string(),
+  value: z.number(),
+  gainLoss: z.number().nullable(),
+});
+
 export const portfolioResponseSchema = z.object({
   rows: z.array(holdingRowSchema),
   sectors: z.array(sectorSummarySchema),
@@ -87,6 +93,7 @@ export const portfolioResponseSchema = z.object({
     gainLossPercent: z.number().nullable(),
     isPartial: z.boolean(),
   }),
+  history: z.array(historyPointSchema),
   meta: z.object({
     generatedAt: z.string(),
     lastQuoteUpdate: z.string().nullable(),

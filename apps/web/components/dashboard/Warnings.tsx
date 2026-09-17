@@ -10,7 +10,7 @@ export function Warnings({ warnings }: { warnings: string[] }) {
   if (dismissed || warnings.length === 0) return null;
 
   return (
-    <div className="flex items-start gap-3 border border-accent/40 bg-accent/5 px-3 py-2 text-sm">
+    <div className="flex items-start gap-3 rounded-2xl border border-accent/30 bg-accent-soft px-4 py-3 text-sm">
       <Info aria-hidden className="mt-0.5 size-4 shrink-0 text-accent" />
       <ul className="flex flex-1 flex-col gap-1">
         {warnings.map((warning) => (

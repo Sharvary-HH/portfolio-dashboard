@@ -47,3 +47,5 @@ export const CIRCUIT_OPEN_MS = 60_000;
 export const RETRY_ATTEMPTS = 3;
 export const RETRY_BASE_DELAY_MS = 500;
 export const PRICE_SANITY_FACTOR = 25;
+export const HISTORY_MAX_POINTS = 240;
+export const HISTORY_MIN_SPACING_MS = 15_000;

@@ -13,7 +13,7 @@ export function ErrorBanner({ message, onRetry, onDismiss }: ErrorBannerProps) {
   return (
     <div
       role="alert"
-      className="flex flex-wrap items-center gap-3 border border-loss/40 bg-loss/5 px-3 py-2 text-sm text-ink"
+      className="flex flex-wrap items-center gap-3 rounded-2xl border border-loss/30 bg-loss-soft px-4 py-3 text-sm text-ink"
     >
       <TriangleAlert aria-hidden className="size-4 shrink-0 text-loss" />
       <p className="flex-1 min-w-48">{message}</p>

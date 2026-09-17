@@ -6,22 +6,22 @@ const LABELS: Record<MarketState, string> = {
   CLOSED: 'Market closed',
   PRE: 'Pre-market',
   POST: 'Post-market',
-  UNKNOWN: 'Market status unknown',
+  UNKNOWN: 'Status unknown',
 };
 
 const TONES: Record<MarketState, string> = {
-  OPEN: 'text-gain border-gain/40',
-  CLOSED: 'text-ink-soft border-rule',
-  PRE: 'text-accent border-accent/40',
-  POST: 'text-accent border-accent/40',
-  UNKNOWN: 'text-ink-faint border-rule',
+  OPEN: 'bg-gain-soft text-gain',
+  CLOSED: 'bg-muted text-ink-soft',
+  PRE: 'bg-accent-soft text-accent',
+  POST: 'bg-accent-soft text-accent',
+  UNKNOWN: 'bg-muted text-ink-faint',
 };
 
 export function MarketStatusBadge({ state }: { state: MarketState }) {
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1.5 border px-2 py-1 text-xs font-medium',
+        'inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium',
         TONES[state],
       )}
     >

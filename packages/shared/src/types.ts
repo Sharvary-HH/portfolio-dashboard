@@ -11,6 +11,7 @@ import type {
   marketStateSchema,
   quoteSchema,
   fundamentalsSchema,
+  historyPointSchema,
 } from './schemas.js';
 
 export type Exchange = z.infer<typeof exchangeSchema>;
@@ -24,6 +25,7 @@ export type PortfolioResponse = z.infer<typeof portfolioResponseSchema>;
 export type MarketState = z.infer<typeof marketStateSchema>;
 export type Quote = z.infer<typeof quoteSchema>;
 export type Fundamentals = z.infer<typeof fundamentalsSchema>;
+export type HistoryPoint = z.infer<typeof historyPointSchema>;
 
 export interface ApiErrorBody {
   error: {

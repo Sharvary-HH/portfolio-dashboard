@@ -15,6 +15,7 @@ import { ConfigurationError, MarketDataUnavailableError, messageOf } from '../li
 import { logger } from '../lib/logger.js';
 import { getQuotes } from './quote.service.js';
 import { getFundamentals } from './fundamentals.service.js';
+import { recordValue, valueHistory } from './history.service.js';
 
 let holdingsCache: Holding[] | null = null;
 
@@ -143,10 +144,13 @@ export async function getPortfolio(): Promise<PortfolioResponse> {
     );
   }
 
+  recordValue(totals.totalPresentValue, totals.gainLoss);
+
   return {
     rows,
     sectors: summariseSectors(rows),
     totals,
+    history: valueHistory(),
     meta: {
       generatedAt: new Date().toISOString(),
       lastQuoteUpdate: quoteSnapshot.updatedAt,

@@ -149,25 +149,33 @@ number.
 
 ## 9. Design plan
 
-**Colour tokens** (light / dark): paper `#f7f6f3` / `#0c0e12`, surface `#ffffff` / `#14171d`, rule
-`#dddcd5` / `#262a32`, ink `#16181d` / `#e8e9ec`, gain `#0b7a55` / `#3ecf8e`, loss `#b4331f` /
-`#ff7a68`, accent `#9a6b12` / `#e0aa4a`. The neutrals are warm and low-contrast so that the only
-saturated things on screen are the numbers that matter. Gains and losses also carry a sign and an
-arrow, so colour is never the only signal.
+**Layout concept:** an app shell, not a page — a dark navy rail on the left carrying the portfolio
+value and section switcher, a sticky top bar holding search, market status, the live countdown and
+the refresh controls, and a work area of white cards on a cool grey canvas. Overview stacks four
+stat tiles, a portfolio-value chart, best and worst performers, the two sector charts, and finally
+the full holdings table at full width, with a details rail on the right that fills in when a row is
+picked.
 
-**Type:** IBM Plex Sans for labels and IBM Plex Mono for every number, loaded with `next/font`. Plex
-Mono's tabular figures are what keep a column of rupee amounts readable and stop the layout twitching
-on each poll.
+**Colour tokens** (light / dark): canvas `#f4f6fb` / `#0b0d17`, surface `#ffffff` / `#141827`, rule
+`#e7eaf3` / `#252b40`, ink `#121826` / `#eef0f6`, brand indigo `#2f3bb3` / `#7d88ef`, rail `#1b1f43`
+/ `#10131f`, gain `#0f9b6c` / `#35d39a`, loss `#d1453b` / `#ff6f63`, accent `#b7791f` / `#e2a94b`.
+Each of gain, loss, accent and brand also has a soft tint used for pills, icon chips and the flash
+animation. Gains and losses keep a sign and an arrow, so colour is never the only signal.
 
-**Layout:** a trading terminal, not a marketing page — a single full-width ledger with a sticky
-header and sticky first column, generous row height, hairline rules instead of cards and shadows, and
-a compact summary strip above it. The charts sit below the table because the table is the tool.
+**Type:** Plus Jakarta Sans for headings, section titles and every headline figure; Inter for body,
+labels and table numbers. Numbers carry `font-variant-numeric: tabular-nums`, which is what stops
+the columns twitching on each poll. Both are loaded through `next/font`.
 
-The chart palette is the eight-hue categorical set from the design reference, first six slots, and was
+**Cards over rules:** every block is a 16px-radius card with a hairline border and a two-layer
+shadow, which is what gives the page depth without heavy chrome. Holdings get a coloured initials
+avatar keyed off the name hash, so rows are scannable without logo assets.
+
+The chart palette is the eight-hue categorical set from the design reference, first six slots,
 checked with the palette validator in both modes: worst adjacent CVD ΔE 9.1 light / 8.4 dark,
-normal-vision ΔE 19.6 / 19.3, all above the floors. Three light-mode hues fall below 3:1 against
-white, so the donut ships a labelled legend with percentages rather than relying on the wedges alone.
-The gain/loss bars use the diverging gain/loss tokens with a zero reference line.
+normal-vision ΔE 19.6 / 19.3, both above the floors. Three light-mode hues fall below 3:1 against
+white, so the donut ships a labelled legend with percentages and returns rather than relying on the
+wedges alone. The gain/loss bars use the diverging gain/loss tokens with a zero reference line, and
+the value chart is a single-series area in whichever of the two the session is trending.
 
 ## 10. With more time
 

@@ -9,7 +9,7 @@ import {
   useReactTable,
   type SortingState,
 } from '@tanstack/react-table';
-import { ArrowDown, ArrowUp, ChevronsUpDown, Search } from 'lucide-react';
+import { ArrowDown, ArrowUp, ChevronsUpDown } from 'lucide-react';
 import {
   formatCurrency,
   formatPercent,
@@ -26,6 +26,9 @@ import { layoutOf } from './cellClass';
 
 interface PortfolioTableProps {
   portfolio: PortfolioResponse;
+  query: string;
+  selectedId: string | null;
+  onSelect: (holdingId: string) => void;
 }
 
 function matches(row: Holding, query: string): boolean {
@@ -34,9 +37,8 @@ function matches(row: Holding, query: string): boolean {
   return row.name.toLowerCase().includes(needle) || row.exchangeCode.toLowerCase().includes(needle);
 }
 
-export function PortfolioTable({ portfolio }: PortfolioTableProps) {
+export function PortfolioTable({ portfolio, query, selectedId, onSelect }: PortfolioTableProps) {
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [query, setQuery] = useState('');
   const [collapsed, setCollapsed] = useState<string[]>([]);
 
   const columns = useMemo(() => portfolioColumns, []);
@@ -46,7 +48,6 @@ export function PortfolioTable({ portfolio }: PortfolioTableProps) {
     columns,
     state: { sorting, globalFilter: query },
     onSortingChange: setSorting,
-    onGlobalFilterChange: setQuery,
     globalFilterFn: (row, _columnId, value: string) => matches(row.original, value),
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -87,137 +88,135 @@ export function PortfolioTable({ portfolio }: PortfolioTableProps) {
   return (
     <section aria-label="Holdings" className="flex flex-col gap-3">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <label className="flex items-center gap-2 border border-rule bg-surface px-2.5 py-1.5 text-sm">
-          <Search aria-hidden className="size-3.5 text-ink-faint" />
-          <span className="sr-only">Filter holdings by name or code</span>
-          <input
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Filter by name or code"
-            className="w-48 bg-transparent text-sm outline-none placeholder:text-ink-faint"
-          />
-        </label>
-
-        <div className="flex items-center gap-2">
-          <span className="numeric text-xs text-ink-faint">
-            {rows.length} of {portfolio.rows.length} holdings
-          </span>
-          <Button onClick={allCollapsed ? expandAll : collapseAll}>
-            {allCollapsed ? 'Expand all' : 'Collapse all'}
-          </Button>
+        <div>
+          <h2 className="font-display text-sm font-bold tracking-tight">Holdings</h2>
+          <p className="numeric text-xs text-ink-soft">
+            {rows.length} of {portfolio.rows.length} shown, grouped by sector
+          </p>
         </div>
+        <Button onClick={allCollapsed ? expandAll : collapseAll}>
+          {allCollapsed ? 'Expand all' : 'Collapse all'}
+        </Button>
       </div>
 
-      <div className="hidden overflow-x-auto border border-rule bg-surface md:block">
-        <table className="w-full min-w-5xl border-collapse text-sm">
-          <thead className="sticky top-0 z-20 bg-surface">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id} className="border-b border-rule">
-                {headerGroup.headers.map((header) => {
-                  const layout = layoutOf(header.column);
-                  const sorted = header.column.getIsSorted();
+      {rows.length === 0 ? (
+        <p className="card px-4 py-8 text-center text-sm text-ink-soft">
+          Nothing matches that search.
+        </p>
+      ) : (
+        <div className="card hidden overflow-x-auto md:block">
+          <table className="w-full min-w-5xl border-collapse text-sm">
+            <thead className="sticky top-0 z-20 bg-surface">
+              {table.getHeaderGroups().map((headerGroup) => (
+                <tr key={headerGroup.id} className="border-b border-rule">
+                  {headerGroup.headers.map((header) => {
+                    const layout = layoutOf(header.column);
+                    const sorted = header.column.getIsSorted();
 
-                  return (
-                    <th
-                      key={header.id}
-                      scope="col"
-                      aria-sort={
-                        sorted === 'asc' ? 'ascending' : sorted === 'desc' ? 'descending' : 'none'
-                      }
-                      className={cn(
-                        'px-3 py-2.5 text-xs font-medium tracking-wide text-ink-soft',
-                        layout.align === 'left' ? 'text-left' : 'text-right',
-                        layout.sticky && 'sticky left-0 z-10 bg-surface',
-                        layout.width,
-                      )}
-                    >
-                      <button
-                        type="button"
-                        onClick={header.column.getToggleSortingHandler()}
+                    return (
+                      <th
+                        key={header.id}
+                        scope="col"
+                        aria-sort={
+                          sorted === 'asc' ? 'ascending' : sorted === 'desc' ? 'descending' : 'none'
+                        }
                         className={cn(
-                          'inline-flex items-center gap-1 hover:text-ink',
-                          layout.align === 'left' ? '' : 'flex-row-reverse',
+                          'px-3 py-3 text-xs font-medium text-ink-soft',
+                          layout.align === 'left' ? 'text-left' : 'text-right',
+                          layout.sticky && 'sticky left-0 z-10 bg-surface',
+                          layout.width,
                         )}
                       >
-                        {flexRender(header.column.columnDef.header, header.getContext())}
-                        {sorted === 'asc' ? (
-                          <ArrowUp aria-hidden className="size-3" />
-                        ) : sorted === 'desc' ? (
-                          <ArrowDown aria-hidden className="size-3" />
-                        ) : (
-                          <ChevronsUpDown aria-hidden className="size-3 opacity-40" />
-                        )}
-                      </button>
-                    </th>
-                  );
-                })}
-              </tr>
-            ))}
-          </thead>
-
-          {groups.map((group) => (
-            <SectorGroup
-              key={group.summary.sector}
-              summary={group.summary}
-              rows={group.rows}
-              columns={leafColumns}
-              isExpanded={!collapsed.includes(group.summary.sector)}
-              onToggle={toggleSector}
-            />
-          ))}
-
-          <tfoot className="border-t-2 border-rule bg-sunken">
-            <tr>
-              {leafColumns.map((column) => {
-                const layout = layoutOf(column);
-                const shared = cn(
-                  'px-3 py-3 text-xs font-semibold',
-                  layout.align === 'left' ? 'text-left' : 'text-right numeric',
-                  layout.sticky && 'sticky left-0 z-10 bg-sunken',
-                );
-
-                switch (column.id) {
-                  case 'name':
-                    return (
-                      <th key={column.id} scope="row" className={shared}>
-                        Total
+                        <button
+                          type="button"
+                          onClick={header.column.getToggleSortingHandler()}
+                          className={cn(
+                            'inline-flex items-center gap-1 hover:text-ink',
+                            layout.align === 'left' ? '' : 'flex-row-reverse',
+                          )}
+                        >
+                          {flexRender(header.column.columnDef.header, header.getContext())}
+                          {sorted === 'asc' ? (
+                            <ArrowUp aria-hidden className="size-3" />
+                          ) : sorted === 'desc' ? (
+                            <ArrowDown aria-hidden className="size-3" />
+                          ) : (
+                            <ChevronsUpDown aria-hidden className="size-3 opacity-40" />
+                          )}
+                        </button>
                       </th>
                     );
-                  case 'investment':
-                    return (
-                      <td key={column.id} className={shared}>
-                        {formatCurrency(portfolio.totals.totalInvestment)}
-                      </td>
-                    );
-                  case 'portfolioPercent':
-                    return (
-                      <td key={column.id} className={shared}>
-                        {formatPercent(100)}
-                      </td>
-                    );
-                  case 'presentValue':
-                    return (
-                      <td key={column.id} className={shared}>
-                        {formatCurrency(portfolio.totals.totalPresentValue)}
-                      </td>
-                    );
-                  case 'gainLoss':
-                    return (
-                      <td key={column.id} className={shared}>
-                        <GainLossCell
-                          value={portfolio.totals.gainLoss}
-                          percent={portfolio.totals.gainLossPercent}
-                        />
-                      </td>
-                    );
-                  default:
-                    return <td key={column.id} className={shared} />;
-                }
-              })}
-            </tr>
-          </tfoot>
-        </table>
-      </div>
+                  })}
+                </tr>
+              ))}
+            </thead>
+
+            {groups.map((group) => (
+              <SectorGroup
+                key={group.summary.sector}
+                summary={group.summary}
+                rows={group.rows}
+                columns={leafColumns}
+                isExpanded={!collapsed.includes(group.summary.sector)}
+                onToggle={toggleSector}
+                selectedId={selectedId}
+                onSelect={onSelect}
+              />
+            ))}
+
+            <tfoot className="border-t border-rule bg-muted">
+              <tr>
+                {leafColumns.map((column) => {
+                  const layout = layoutOf(column);
+                  const shared = cn(
+                    'px-3 py-3.5 text-xs font-semibold',
+                    layout.align === 'left' ? 'text-left' : 'text-right numeric',
+                    layout.sticky && 'sticky left-0 z-10 bg-muted',
+                  );
+
+                  switch (column.id) {
+                    case 'name':
+                      return (
+                        <th key={column.id} scope="row" className={shared}>
+                          Portfolio total
+                        </th>
+                      );
+                    case 'investment':
+                      return (
+                        <td key={column.id} className={shared}>
+                          {formatCurrency(portfolio.totals.totalInvestment)}
+                        </td>
+                      );
+                    case 'portfolioPercent':
+                      return (
+                        <td key={column.id} className={shared}>
+                          {formatPercent(100)}
+                        </td>
+                      );
+                    case 'presentValue':
+                      return (
+                        <td key={column.id} className={shared}>
+                          {formatCurrency(portfolio.totals.totalPresentValue)}
+                        </td>
+                      );
+                    case 'gainLoss':
+                      return (
+                        <td key={column.id} className={shared}>
+                          <GainLossCell
+                            value={portfolio.totals.gainLoss}
+                            percent={portfolio.totals.gainLossPercent}
+                          />
+                        </td>
+                      );
+                    default:
+                      return <td key={column.id} className={shared} />;
+                  }
+                })}
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      )}
 
       <div className="flex flex-col gap-4 md:hidden">
         {groups.map((group) => (
@@ -226,7 +225,7 @@ export function PortfolioTable({ portfolio }: PortfolioTableProps) {
               type="button"
               onClick={() => toggleSector(group.summary.sector)}
               aria-expanded={!collapsed.includes(group.summary.sector)}
-              className="flex items-center justify-between border border-rule bg-sunken px-3 py-2 text-left"
+              className="card flex items-center justify-between px-4 py-2.5 text-left"
             >
               <span className="text-sm font-semibold">{group.summary.sector}</span>
               <GainLossCell

@@ -23,10 +23,10 @@ function Field({ label, value }: { label: string; value: string }) {
 
 function MobileHoldingCardBase({ holding }: { holding: HoldingRow }) {
   return (
-    <article className="border border-rule bg-surface px-3 py-3">
-      <header className="flex items-start justify-between gap-3 border-b border-rule/70 pb-2">
-        <div className="flex flex-col">
-          <span className="text-sm font-semibold">{holding.name}</span>
+    <article className="card px-4 py-3">
+      <header className="flex items-start justify-between gap-3 border-b border-rule pb-2">
+        <div className="flex min-w-0 flex-col">
+          <span className="truncate text-sm font-semibold">{holding.name}</span>
           <span className="numeric text-[0.7rem] text-ink-faint">
             {holding.exchangeCode} · {holding.exchange}
           </span>
@@ -38,7 +38,7 @@ function MobileHoldingCardBase({ holding }: { holding: HoldingRow }) {
         />
       </header>
 
-      <div className="flex items-center justify-between border-b border-rule/70 py-2">
+      <div className="flex items-center justify-between border-b border-rule py-2">
         <div className="flex flex-col">
           <span className="text-[0.7rem] text-ink-faint">Present value</span>
           <span className="numeric text-sm">{formatCurrency(holding.presentValue)}</span>

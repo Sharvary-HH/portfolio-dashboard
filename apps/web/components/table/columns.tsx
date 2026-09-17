@@ -14,6 +14,7 @@ import { GainLossCell } from './GainLossCell';
 import { StaleBadge } from '@/components/ui/StaleBadge';
 import { Tooltip } from '@/components/ui/Tooltip';
 import { PriceCell } from './PriceCell';
+import { TickerAvatar } from './TickerAvatar';
 
 const helper = createColumnHelper<HoldingRow>();
 
@@ -21,8 +22,16 @@ export const portfolioColumns = [
   helper.accessor('name', {
     id: 'name',
     header: 'Particulars',
-    cell: (info) => <span className="font-medium">{info.getValue()}</span>,
-    meta: { align: 'left', sticky: true, width: 'w-56' },
+    cell: (info) => (
+      <span className="flex items-center gap-2.5">
+        <TickerAvatar name={info.getValue()} />
+        <span className="min-w-0">
+          <span className="block truncate font-medium">{info.getValue()}</span>
+          <span className="block text-[0.7rem] text-ink-faint">{info.row.original.sector}</span>
+        </span>
+      </span>
+    ),
+    meta: { align: 'left', sticky: true, width: 'w-60' },
   }),
   helper.accessor('purchasePrice', {
     header: 'Purchase price',
@@ -49,7 +58,7 @@ export const portfolioColumns = [
     cell: (info) => (
       <span className="flex items-center justify-end gap-1.5">
         <span className="numeric">{info.getValue()}</span>
-        <span className="rounded-sm border border-rule px-1 text-[0.6rem] tracking-wide text-ink-faint">
+        <span className="rounded-md bg-muted px-1.5 py-0.5 text-[0.6rem] font-medium tracking-wide text-ink-faint">
           {info.row.original.exchange}
         </span>
       </span>

@@ -3,48 +3,71 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --paper: #f7f6f3;
+  --canvas: #f4f6fb;
   --surface: #ffffff;
-  --surface-sunken: #efeee9;
-  --rule: #dddcd5;
-  --ink: #16181d;
-  --ink-soft: #5b6068;
-  --ink-faint: #8b9099;
-  --gain: #0b7a55;
-  --loss: #b4331f;
-  --accent: #9a6b12;
-  --flash-gain: rgba(11, 122, 85, 0.16);
-  --flash-loss: rgba(180, 51, 31, 0.16);
+  --surface-muted: #f7f8fc;
+  --rule: #e7eaf3;
+  --ink: #121826;
+  --ink-soft: #5c6479;
+  --ink-faint: #949cb0;
+  --brand: #2f3bb3;
+  --brand-soft: #eceefc;
+  --rail: #1b1f43;
+  --rail-ink: #b9bde0;
+  --rail-active: #2f3bb3;
+  --gain: #0f9b6c;
+  --gain-soft: #e4f6ef;
+  --loss: #d1453b;
+  --loss-soft: #fdeceb;
+  --accent: #b7791f;
+  --accent-soft: #fdf3e2;
+  --shadow-card: 0 1px 2px rgba(18, 24, 38, 0.04), 0 8px 24px rgba(18, 24, 38, 0.06);
 }
 
 .dark {
-  --paper: #0c0e12;
-  --surface: #14171d;
-  --surface-sunken: #0f1216;
-  --rule: #262a32;
-  --ink: #e8e9ec;
-  --ink-soft: #9aa1ad;
-  --ink-faint: #6b7280;
-  --gain: #3ecf8e;
-  --loss: #ff7a68;
-  --accent: #e0aa4a;
-  --flash-gain: rgba(62, 207, 142, 0.18);
-  --flash-loss: rgba(255, 122, 104, 0.18);
+  --canvas: #0b0d17;
+  --surface: #141827;
+  --surface-muted: #1a1f31;
+  --rule: #252b40;
+  --ink: #eef0f6;
+  --ink-soft: #99a1b8;
+  --ink-faint: #6c748c;
+  --brand: #7d88ef;
+  --brand-soft: #1e2344;
+  --rail: #10131f;
+  --rail-ink: #8f97b5;
+  --rail-active: #2f3bb3;
+  --gain: #35d39a;
+  --gain-soft: #10291f;
+  --loss: #ff6f63;
+  --loss-soft: #2b1614;
+  --accent: #e2a94b;
+  --accent-soft: #2a2114;
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.28);
 }
 
 @theme inline {
-  --color-paper: var(--paper);
+  --color-canvas: var(--canvas);
   --color-surface: var(--surface);
-  --color-sunken: var(--surface-sunken);
+  --color-muted: var(--surface-muted);
   --color-rule: var(--rule);
   --color-ink: var(--ink);
   --color-ink-soft: var(--ink-soft);
   --color-ink-faint: var(--ink-faint);
+  --color-brand: var(--brand);
+  --color-brand-soft: var(--brand-soft);
+  --color-rail: var(--rail);
+  --color-rail-ink: var(--rail-ink);
+  --color-rail-active: var(--rail-active);
   --color-gain: var(--gain);
+  --color-gain-soft: var(--gain-soft);
   --color-loss: var(--loss);
+  --color-loss-soft: var(--loss-soft);
   --color-accent: var(--accent);
-  --font-sans: var(--font-plex-sans);
-  --font-mono: var(--font-plex-mono);
+  --color-accent-soft: var(--accent-soft);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-jakarta);
+  --shadow-card: var(--shadow-card);
 }
 
 html {
@@ -56,24 +79,42 @@ html.dark {
 }
 
 body {
-  background: var(--paper);
+  background: var(--canvas);
   color: var(--ink);
+  -webkit-font-smoothing: antialiased;
 }
 
 .numeric {
-  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-feature-settings: 'tnum' 1, 'cv05' 1;
   font-variant-numeric: tabular-nums;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.005em;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-card);
 }
 
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--brand);
   outline-offset: 2px;
+}
+
+::-webkit-scrollbar {
+  height: 10px;
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--rule);
+  border-radius: 999px;
 }
 
 @keyframes flash-up {
   from {
-    background-color: var(--flash-gain);
+    background-color: var(--gain-soft);
   }
   to {
     background-color: transparent;
@@ -82,7 +123,7 @@ body {
 
 @keyframes flash-down {
   from {
-    background-color: var(--flash-loss);
+    background-color: var(--loss-soft);
   }
   to {
     background-color: transparent;
@@ -90,11 +131,13 @@ body {
 }
 
 .flash-up {
-  animation: flash-up 800ms ease-out;
+  animation: flash-up 900ms ease-out;
+  border-radius: 0.5rem;
 }
 
 .flash-down {
-  animation: flash-down 800ms ease-out;
+  animation: flash-down 900ms ease-out;
+  border-radius: 0.5rem;
 }
 
 @media (prefers-reduced-motion: reduce) {

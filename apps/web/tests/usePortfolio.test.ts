@@ -11,6 +11,7 @@ function snapshot(totalPresentValue: number): PortfolioResponse {
   return {
     rows: [],
     sectors: [],
+    history: [],
     totals: {
       totalInvestment: 1000,
       totalPresentValue,

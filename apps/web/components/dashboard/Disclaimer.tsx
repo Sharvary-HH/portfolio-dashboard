@@ -1,6 +1,6 @@
 export function Disclaimer() {
   return (
-    <footer className="border-t border-rule pt-4 text-xs leading-relaxed text-ink-faint">
+    <footer className="pt-2 text-xs leading-relaxed text-ink-faint">
       <p>
         Prices come from Yahoo Finance and fundamentals from Google Finance. Neither publishes an
         official API, so values may be delayed, incomplete or occasionally wrong, and a source can

@@ -15,9 +15,7 @@ export function cellClass(column: Column<HoldingRow, unknown>): string {
   const layout = layoutOf(column);
   const classes = [layout.align === 'left' ? 'text-left' : 'text-right numeric'];
 
-  if (layout.sticky) {
-    classes.push('sticky left-0 z-10 bg-surface group-hover:bg-sunken');
-  }
+  if (layout.sticky) classes.push('sticky left-0 z-10 bg-surface group-hover:bg-muted');
 
   return classes.join(' ');
 }

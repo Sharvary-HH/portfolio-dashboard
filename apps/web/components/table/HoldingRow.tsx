@@ -6,11 +6,23 @@ import type { HoldingRow as Holding } from '@portfolio/shared';
 import { cn } from '@/lib/cn';
 import { cellClass } from './cellClass';
 
-function HoldingRowBase({ row }: { row: Row<Holding> }) {
+interface HoldingRowProps {
+  row: Row<Holding>;
+  isSelected: boolean;
+  onSelect: (holdingId: string) => void;
+}
+
+function HoldingRowBase({ row, isSelected, onSelect }: HoldingRowProps) {
   return (
-    <tr className="border-b border-rule/70 last:border-b-0 hover:bg-sunken/60">
+    <tr
+      onClick={() => onSelect(row.original.id)}
+      className={cn(
+        'group cursor-pointer border-b border-rule/60 last:border-b-0 hover:bg-muted',
+        isSelected && 'bg-brand-soft/60',
+      )}
+    >
       {row.getVisibleCells().map((cell) => (
-        <td key={cell.id} className={cn('px-3 py-2.5 align-middle', cellClass(cell.column))}>
+        <td key={cell.id} className={cn('px-3 py-3 align-middle', cellClass(cell.column))}>
           {flexRender(cell.column.columnDef.cell, cell.getContext())}
         </td>
       ))}
