@@ -4,7 +4,7 @@ services:
     runtime: node
     plan: free
     region: singapore
-    buildCommand: npm install && npm run build -w @portfolio/shared && npm run build -w @portfolio/api
+    buildCommand: npm install --include=dev --workspace @portfolio/api --workspace @portfolio/shared --include-workspace-root && npm run build -w @portfolio/shared && npm run build -w @portfolio/api
     startCommand: npm start -w @portfolio/api
     healthCheckPath: /api/health
     autoDeploy: true
@@ -28,7 +28,7 @@ services:
       - key: SYMBOL_RETRY_SECONDS
         value: 900
       - key: WARM_UP_ON_START
-        value: true
+        value: "true"
       - key: HOLDINGS_FILE
         value: data/holdings.json
       - key: CORS_ORIGIN
