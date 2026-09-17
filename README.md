@@ -221,15 +221,47 @@ data/
 
 ## Deployment
 
-- **Web** → Vercel. Set `API_BASE_URL` to the deployed API URL.
-- **API** → Render, Railway or Fly.io. A multi-stage `apps/api/Dockerfile` is included and runs as
-  the non-root `node` user. Serverless is a poor fit: the in-memory cache, the circuit breakers and
-  the startup warm-up all assume one long-lived process, and per-invocation containers would re-scrape
-  Google on nearly every request.
-- Set `CORS_ORIGIN` to the deployed web origin.
+The API goes on a long-running host and the dashboard on Vercel. Config for both is committed:
+`render.yaml` at the root and `apps/web/vercel.json`.
 
-Cloud IPs are far more likely to be rate-limited or served a consent page by Google and Yahoo than a
-home connection. If a demo has to be reliable, run it with `DATA_MODE=mock`.
+Serverless is a poor fit for the API: the in-memory cache, the circuit breakers and the startup
+warm-up all assume one long-lived process, and per-invocation containers would re-scrape Google on
+nearly every request.
+
+### 1. API on Render
+
+1. Render dashboard → **New → Blueprint**, pick this repository. `render.yaml` is detected and
+   creates the `portfolio-api` service with every environment variable except one.
+2. Set `CORS_ORIGIN` to the Vercel URL from step 2 (it can be left blank on the first deploy and
+   filled in afterwards — the service redeploys on save).
+3. The service answers on `https://<name>.onrender.com`, health check at `/api/health`.
+
+The free plan sleeps after 15 minutes of inactivity, which empties the cache and makes the next
+request slow. A paid instance keeps the warm cache the design assumes.
+
+### 2. Web on Vercel
+
+1. Vercel → **Add New → Project**, import the repository.
+2. Set **Root Directory** to `apps/web`. `vercel.json` handles the rest: install runs at the
+   workspace root and the build compiles `@portfolio/shared` before `next build`.
+3. Add one environment variable: `API_BASE_URL` = the Render URL from step 1, no trailing slash.
+4. Deploy, then put that Vercel URL into Render's `CORS_ORIGIN`.
+
+### Docker
+
+`apps/api/Dockerfile` is a multi-stage build running as the non-root `node` user, for any host that
+takes a container instead:
+
+```bash
+docker build -f apps/api/Dockerfile -t portfolio-api .
+docker run -p 4000:4000 -e CORS_ORIGIN=https://your-app.vercel.app portfolio-api
+```
+
+### A warning about cloud IPs
+
+Datacentre IPs are far more likely to be rate-limited by Yahoo or served a cookie-consent page by
+Google than a home connection, and the app will then show stale values and warnings rather than
+fresh prices. If a demo has to be reliable, deploy the API with `DATA_MODE=mock`.
 
 ## Limitations
 

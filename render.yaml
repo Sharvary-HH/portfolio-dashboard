@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: portfolio-api
+    runtime: node
+    plan: free
+    region: singapore
+    buildCommand: npm install && npm run build -w @portfolio/shared && npm run build -w @portfolio/api
+    startCommand: npm start -w @portfolio/api
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: 22.11.0
+      - key: NODE_ENV
+        value: production
+      - key: DATA_MODE
+        value: live
+      - key: LOG_LEVEL
+        value: info
+      - key: QUOTE_TTL_SECONDS
+        value: 15
+      - key: FUNDAMENTALS_TTL_SECONDS
+        value: 21600
+      - key: STALE_MAX_AGE_SECONDS
+        value: 86400
+      - key: SYMBOL_TTL_SECONDS
+        value: 86400
+      - key: SYMBOL_RETRY_SECONDS
+        value: 900
+      - key: WARM_UP_ON_START
+        value: true
+      - key: HOLDINGS_FILE
+        value: data/holdings.json
+      - key: CORS_ORIGIN
+        sync: false
