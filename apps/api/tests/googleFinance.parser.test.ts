@@ -75,6 +75,14 @@ describe('parseGoogleFinance', () => {
     expect(result.latestEarnings?.netIncome).toBeGreaterThan(0);
   });
 
+  it('ignores a percentage that belongs to something other than the price', () => {
+    const result = parseGoogleFinance(fixture('stray-percent'));
+
+    expect(result.price).toBe(18);
+    expect(result.dayChangePercent).toBe(1.98);
+    expect(result.currency).toBe('INR');
+  });
+
   it('returns nulls when the page shows dashes instead of values', () => {
     const result = parseGoogleFinance(fixture('missing-pe'));
 

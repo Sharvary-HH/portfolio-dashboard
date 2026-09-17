@@ -29,6 +29,8 @@ const MISSING_MARKERS = new Set(['-', '—', '–', '', 'N/A']);
 const STANDALONE_AMOUNT = /^[₹$€£]\s?[\d,]+(?:\.\d+)?$/;
 const CHANGE_PERCENT = /([+-]?\d+(?:\.\d+)?)%/;
 const CURRENCY_CODE = /·\s*([A-Z]{3})\b/;
+const PRICE_BLOCK_LENGTH = 60;
+const MAX_DAY_CHANGE_PERCENT = 100;
 
 export function parseCompactNumber(input: string | null | undefined): number | null {
   if (input === null || input === undefined) return null;
@@ -86,7 +88,8 @@ function parseQuote(
 
   if (priceNode.length === 0) return { price: null, dayChangePercent: null, currency: null };
 
-  const price = parseCompactNumber(priceNode.text());
+  const priceText = priceNode.text().trim();
+  const price = parseCompactNumber(priceText);
 
   let dayChangePercent: number | null = null;
   let currency: string | null = null;
@@ -94,18 +97,24 @@ function parseQuote(
 
   for (let depth = 0; depth < 5 && container.length > 0; depth += 1) {
     const text = container.text();
+    const start = text.indexOf(priceText);
 
-    if (dayChangePercent === null) {
-      const match = CHANGE_PERCENT.exec(text);
-      if (match) {
-        const magnitude = Number(match[1]);
-        const falling = text.includes('arrow_downward') || match[1]?.startsWith('-');
-        dayChangePercent = falling ? -Math.abs(magnitude) : Math.abs(magnitude);
+    if (start !== -1) {
+      const block = text.slice(start, start + PRICE_BLOCK_LENGTH);
+
+      if (dayChangePercent === null) {
+        const match = CHANGE_PERCENT.exec(block);
+        const magnitude = match ? Math.abs(Number(match[1])) : null;
+
+        if (magnitude !== null && magnitude <= MAX_DAY_CHANGE_PERCENT) {
+          const falling = block.includes('arrow_downward') || match?.[1]?.startsWith('-') === true;
+          dayChangePercent = falling ? -magnitude : magnitude;
+        }
       }
-    }
 
-    currency ??= CURRENCY_CODE.exec(text)?.[1] ?? null;
-    if (dayChangePercent !== null && currency !== null) break;
+      currency ??= CURRENCY_CODE.exec(text)?.[1] ?? null;
+      if (dayChangePercent !== null && currency !== null) break;
+    }
 
     container = container.parent();
   }
