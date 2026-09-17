@@ -1,0 +1,29 @@
+[
+  {
+    "id": "hdfc-bank",
+    "name": "HDFC Bank",
+    "sector": "Financial",
+    "purchasePrice": 1490,
+    "quantity": 50,
+    "exchange": "NSE",
+    "exchangeCode": "HDFCBANK"
+  },
+  {
+    "id": "icici-bank",
+    "name": "ICICI Bank",
+    "sector": "Financial",
+    "purchasePrice": 780,
+    "quantity": 84,
+    "exchange": "BSE",
+    "exchangeCode": "532174"
+  },
+  {
+    "id": "infosys",
+    "name": "Infosys",
+    "sector": "Tech",
+    "purchasePrice": 1647,
+    "quantity": 36,
+    "exchange": "NSE",
+    "exchangeCode": "INFY"
+  }
+]
