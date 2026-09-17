@@ -1,0 +1,38 @@
+{
+  "name": "@portfolio/api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/server.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.tests.json",
+    "lint": "eslint src tests --config ../../eslint.config.mjs"
+  },
+  "dependencies": {
+    "@portfolio/shared": "*",
+    "axios": "^1.7.9",
+    "cheerio": "^1.2.0",
+    "compression": "^1.7.5",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.0.0",
+    "lru-cache": "^11.0.2",
+    "p-limit": "^7.3.2",
+    "pino": "^9.6.0",
+    "pino-http": "^10.4.0",
+    "yahoo-finance2": "^4.0.2",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@types/compression": "^1.7.5",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/supertest": "^6.0.2",
+    "supertest": "^7.0.0"
+  }
+}
