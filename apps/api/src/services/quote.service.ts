@@ -4,8 +4,10 @@ import { StaleWhileErrorCache } from '../lib/cache.js';
 import { CircuitBreaker } from '../lib/circuitBreaker.js';
 import { messageOf } from '../lib/errors.js';
 import { logger } from '../lib/logger.js';
-import { yahooSymbol } from '../lib/symbols.js';
+import { googleQuoteCode, yahooSymbol } from '../lib/symbols.js';
 import { fetchQuotes, marketStateFrom, resolveSymbol } from '../providers/yahoo.provider.js';
+import { fetchQuotePage } from '../providers/googleFinance.provider.js';
+import type { GoogleFinanceQuotePage } from '../providers/googleFinance.parser.js';
 import { mockQuotes } from '../providers/mock.provider.js';
 
 const QUOTES_KEY = 'quotes:all';
@@ -122,6 +124,53 @@ async function loadLiveQuotes(holdings: readonly Holding[]): Promise<Map<string,
   return quotes;
 }
 
+async function googleQuoteFor(holding: Holding): Promise<Quote | null> {
+  const code = googleQuoteCode(holding);
+
+  const page = await cache
+    .getOrFetch<GoogleFinanceQuotePage>(`gprice:${code}`, env.GOOGLE_PRICE_TTL_SECONDS, () =>
+      fetchQuotePage(code),
+    )
+    .catch((error: unknown) => {
+      logger.warn({ holding: holding.id, error: messageOf(error) }, 'google price failed');
+      return null;
+    });
+
+  const price = page?.value.price ?? null;
+  if (price === null || !isPlausible(price, holding.purchasePrice)) return null;
+
+  return {
+    symbol: code,
+    price,
+    dayChangePercent: page?.value.dayChangePercent ?? null,
+    currency: page?.value.currency ?? null,
+    marketState: 'UNKNOWN',
+    quotedAt: new Date().toISOString(),
+    trailingPE: page?.value.peRatio ?? null,
+    trailingEps: page?.value.eps ?? null,
+    source: 'google',
+  };
+}
+
+async function loadGoogleQuotes(
+  holdings: readonly Holding[],
+): Promise<{ quotes: Map<string, Quote>; symbols: Map<string, string> }> {
+  const quotes = new Map<string, Quote>();
+  const symbols = new Map<string, string>();
+
+  const settled = await Promise.all(holdings.map((holding) => googleQuoteFor(holding)));
+
+  holdings.forEach((holding, index) => {
+    const quote = settled[index];
+    if (!quote) return;
+
+    quotes.set(quote.symbol, quote);
+    symbols.set(holding.id, quote.symbol);
+  });
+
+  return { quotes, symbols };
+}
+
 export async function getQuotes(holdings: readonly Holding[]): Promise<QuoteSnapshot> {
   if (env.DATA_MODE === 'mock') {
     const quotes = mockQuotes(holdings, yahooSymbol);
@@ -147,6 +196,19 @@ export async function getQuotes(holdings: readonly Holding[]): Promise<QuoteSnap
       stale: result.stale,
     };
   } catch (error) {
+    logger.warn({ error: messageOf(error) }, 'yahoo quotes unavailable, trying google');
+
+    const fallback = await loadGoogleQuotes(holdings);
+    if (fallback.quotes.size > 0) {
+      return {
+        quotes: fallback.quotes,
+        symbols: fallback.symbols,
+        marketState: 'UNKNOWN',
+        updatedAt: new Date().toISOString(),
+        stale: false,
+      };
+    }
+
     logger.error({ error: messageOf(error) }, 'quote refresh failed with no cached data');
 
     return {

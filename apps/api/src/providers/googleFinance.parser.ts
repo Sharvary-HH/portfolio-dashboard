@@ -2,6 +2,9 @@ import * as cheerio from 'cheerio';
 import type { LatestEarnings } from '@portfolio/shared';
 
 export interface GoogleFinanceQuotePage {
+  price: number | null;
+  dayChangePercent: number | null;
+  currency: string | null;
   peRatio: number | null;
   eps: number | null;
   latestEarnings: LatestEarnings | null;
@@ -21,8 +24,11 @@ const MULTIPLIERS: Record<string, number> = {
   T: 1e12,
 };
 
-const KEY_STAT_LABELS = ['P/E ratio', 'Previous close', 'Day range', 'Market cap', 'EPS'];
+const KEY_STAT_LABELS = ['P/E ratio', 'EPS', 'Open', 'High', 'Low'];
 const MISSING_MARKERS = new Set(['-', '—', '–', '', 'N/A']);
+const STANDALONE_AMOUNT = /^[₹$€£]\s?[\d,]+(?:\.\d+)?$/;
+const CHANGE_PERCENT = /([+-]?\d+(?:\.\d+)?)%/;
+const CURRENCY_CODE = /·\s*([A-Z]{3})\b/;
 
 export function parseCompactNumber(input: string | null | undefined): number | null {
   if (input === null || input === undefined) return null;
@@ -62,6 +68,49 @@ function collectLabelledValues($: cheerio.CheerioAPI): Map<string, string> {
   });
 
   return values;
+}
+
+function parseQuote(
+  $: cheerio.CheerioAPI,
+): Pick<GoogleFinanceQuotePage, 'price' | 'dayChangePercent' | 'currency'> {
+  const scope = $('main').length > 0 ? $('main').find('*') : $('body').find('*');
+  const priceNode = scope
+    .filter((_, element) => {
+      const node = $(element);
+      if (node.children().length > 0) return false;
+
+      const text = node.text().trim();
+      return STANDALONE_AMOUNT.test(text) && node.parent().text().trim() === text;
+    })
+    .first();
+
+  if (priceNode.length === 0) return { price: null, dayChangePercent: null, currency: null };
+
+  const price = parseCompactNumber(priceNode.text());
+
+  let dayChangePercent: number | null = null;
+  let currency: string | null = null;
+  let container = priceNode.parent();
+
+  for (let depth = 0; depth < 5 && container.length > 0; depth += 1) {
+    const text = container.text();
+
+    if (dayChangePercent === null) {
+      const match = CHANGE_PERCENT.exec(text);
+      if (match) {
+        const magnitude = Number(match[1]);
+        const falling = text.includes('arrow_downward') || match[1]?.startsWith('-');
+        dayChangePercent = falling ? -Math.abs(magnitude) : Math.abs(magnitude);
+      }
+    }
+
+    currency ??= CURRENCY_CODE.exec(text)?.[1] ?? null;
+    if (dayChangePercent !== null && currency !== null) break;
+
+    container = container.parent();
+  }
+
+  return { price, dayChangePercent, currency };
 }
 
 function looksLikeConsentPage(html: string): boolean {
@@ -133,6 +182,7 @@ export function parseGoogleFinance(html: string): GoogleFinanceQuotePage {
   if (!hasKeyStats && looksLikeConsentPage(html)) throw new ConsentPageError();
 
   return {
+    ...parseQuote($),
     peRatio: parseCompactNumber(stats.get('P/E ratio')),
     eps: parseCompactNumber(stats.get('EPS')),
     latestEarnings: parseQuarterlyEarnings($),

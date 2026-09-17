@@ -41,7 +41,7 @@ async function fromGoogle(holding: Holding): Promise<Fundamentals> {
 async function fromYahoo(quote: Quote | undefined): Promise<Fundamentals | null> {
   if (!quote) return null;
 
-  const earnings = await fetchEarningsFallback(quote.symbol);
+  const earnings = quote.source === 'yahoo' ? await fetchEarningsFallback(quote.symbol) : null;
   const eps = earnings?.eps ?? quote.trailingEps;
 
   if (quote.trailingPE === null && eps === null) return null;
@@ -50,7 +50,7 @@ async function fromYahoo(quote: Quote | undefined): Promise<Fundamentals | null>
     symbol: quote.symbol,
     peRatio: quote.trailingPE,
     latestEarnings: earnings ?? (eps === null ? null : { period: 'TTM', eps, netIncome: null }),
-    source: 'yahoo',
+    source: quote.source,
     fetchedAt: new Date().toISOString(),
   };
 }
@@ -98,7 +98,7 @@ async function resolveOne(holding: Holding, quote: Quote | undefined): Promise<F
           ? null
           : { period: 'TTM', eps: quote.trailingEps, netIncome: null },
       status: {
-        source: quote?.trailingPE === null ? null : 'yahoo',
+        source: quote?.trailingPE === null || quote === undefined ? null : quote.source,
         stale: false,
         error: messageOf(error),
       },

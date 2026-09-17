@@ -40,6 +40,7 @@ export function mockQuotes(holdings: readonly Holding[], symbolOf: (holding: Hol
       quotedAt: new Date().toISOString(),
       trailingPE: Number((15 + seededOffset(symbol) * 40).toFixed(2)),
       trailingEps: Number((price / 25).toFixed(2)),
+      source: 'mock',
     });
   }
 

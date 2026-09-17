@@ -35,6 +35,7 @@ function quote(symbol: string, price: number): Quote {
     quotedAt: new Date().toISOString(),
     trailingPE: 21.5,
     trailingEps: 44.2,
+    source: 'yahoo',
   };
 }
 
@@ -80,6 +81,9 @@ beforeEach(() => {
   providers.resolveSymbol.mockResolvedValue('ICICIBANK.NS');
   providers.fetchEarningsFallback.mockResolvedValue(null);
   providers.fetchQuotePage.mockResolvedValue({
+    price: 1700,
+    dayChangePercent: -0.92,
+    currency: 'INR',
     peRatio: 18.69,
     eps: 91.02,
     latestEarnings: { period: 'Jun 2026', eps: 12.09, netIncome: 170_620_000_000 },
@@ -163,6 +167,19 @@ describe('GET /api/portfolio', () => {
     expect(response.body.totals.totalPresentValue).toBeGreaterThan(0);
     expect(response.body.rows[0].status.quote.stale).toBe(true);
     expect(response.body.meta.warnings.join(' ')).toContain('Yahoo Finance did not respond');
+  });
+
+  it('prices from Google Finance when Yahoo blocks the request', async () => {
+    providers.fetchQuotes.mockRejectedValue(new Error('Failed to get crumb, status 429'));
+
+    const response = await request(app).get('/api/portfolio').expect(200);
+    const hdfc = response.body.rows.find((row: { id: string }) => row.id === 'hdfc-bank');
+
+    expect(hdfc.cmp).toBe(1700);
+    expect(hdfc.dayChangePercent).toBe(-0.92);
+    expect(hdfc.status.quote.source).toBe('google');
+    expect(response.body.totals.totalPresentValue).toBeGreaterThan(0);
+    expect(response.body.meta.warnings.join(' ')).toContain('Prices come from Google Finance');
   });
 
   it('returns 503 when nothing is cached and every provider fails', async () => {

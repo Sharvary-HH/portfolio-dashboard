@@ -73,6 +73,30 @@ That takes live coverage from 7 of 26 holdings to 22. The remaining four are thi
 names Yahoo's search does not return; they show `—`, are excluded from totals, and are counted in
 `meta.warnings`.
 
+## 4b. When Yahoo blocks the server outright
+
+Deploying to Render proved the point section 2 warns about: Yahoo answers a laptop fine but returns
+`429 Too Many Requests` on the crumb endpoint to the datacentre IP, permanently. Google Finance was
+unaffected from the same host.
+
+So the price chain has one more link. When the Yahoo call fails or its circuit is open, the quote
+service reads the price straight off the Google Finance page it already knows how to parse: the
+parser returns `price`, `dayChangePercent` and `currency` alongside the fundamentals, found without
+class names by taking the first standalone currency amount inside `main` whose parent holds nothing
+but that amount — which distinguishes the live price from labelled key stats like `Open ₹717.50`.
+
+These prices use a separate 5-minute TTL (`GOOGLE_PRICE_TTL_SECONDS`), not the 15-second quote TTL:
+26 holdings on a 15-second cycle would be 104 scrapes a minute and a certain block, while 5 minutes
+costs about 5 a minute alongside the existing concurrency limit and jitter. The UI keeps polling
+every 15 seconds; it simply sees a price that changes every few minutes, `status.quote.source` reads
+`google`, and `meta.warnings` says so in plain words.
+
+With Yahoo blocked entirely, this returns real prices for 24 of 26 holdings — one better than Yahoo
+manages, because Google accepts the numeric BSE codes that Yahoo rejects.
+
+**Trade-off:** prices are up to five minutes old in this mode, and the whole portfolio then depends
+on one scraper. It is a degraded mode, labelled as such, not the design target.
+
 ## 5. Real-time updates
 
 Polling every 15 seconds is the baseline because the requirement is a 15-second refresh, not

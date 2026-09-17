@@ -10,6 +10,7 @@ const envSchema = z.object({
   DATA_MODE: z.enum(['live', 'mock']).default('live'),
   QUOTE_TTL_SECONDS: z.coerce.number().int().positive().default(15),
   FUNDAMENTALS_TTL_SECONDS: z.coerce.number().int().positive().default(21600),
+  GOOGLE_PRICE_TTL_SECONDS: z.coerce.number().int().positive().default(300),
   STALE_MAX_AGE_SECONDS: z.coerce.number().int().positive().default(86400),
   SYMBOL_TTL_SECONDS: z.coerce.number().int().positive().default(86400),
   SYMBOL_RETRY_SECONDS: z.coerce.number().int().positive().default(900),

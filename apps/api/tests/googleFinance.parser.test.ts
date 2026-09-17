@@ -38,6 +38,27 @@ describe('parseCompactNumber', () => {
 });
 
 describe('parseGoogleFinance', () => {
+  it('reads the live price, change and currency from an NSE page', () => {
+    const result = parseGoogleFinance(fixture('nse'));
+
+    expect(result.price).toBe(714.85);
+    expect(result.dayChangePercent).toBe(-0.92);
+    expect(result.currency).toBe('INR');
+  });
+
+  it('reads the live price from a BSE page', () => {
+    const result = parseGoogleFinance(fixture('bse'));
+
+    expect(result.price).toBe(1354.2);
+    expect(result.dayChangePercent).toBe(-0.35);
+  });
+
+  it('does not mistake a labelled key stat for the live price', () => {
+    const result = parseGoogleFinance(fixture('nse'));
+
+    expect(result.price).not.toBe(717.5);
+  });
+
   it('reads the P/E ratio and latest quarter from an NSE page', () => {
     const result = parseGoogleFinance(fixture('nse'));
 
@@ -60,6 +81,7 @@ describe('parseGoogleFinance', () => {
     expect(result.peRatio).toBeNull();
     expect(result.eps).toBeNull();
     expect(result.latestEarnings).toBeNull();
+    expect(result.price).toBeNull();
   });
 
   it('rejects a cookie consent interstitial', () => {

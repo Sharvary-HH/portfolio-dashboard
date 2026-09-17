@@ -76,6 +76,7 @@ export async function getPortfolio(): Promise<PortfolioResponse> {
 
   const snapshots = new Map<string, MarketSnapshot>();
   let missingPrices = 0;
+  let googlePrices = 0;
   let staleFundamentals = 0;
   let fallbackFundamentals = 0;
   let failedFundamentals = 0;
@@ -86,6 +87,7 @@ export async function getPortfolio(): Promise<PortfolioResponse> {
     const fundamental = fundamentals.get(holding.id);
 
     if (!quote || quote.price === null) missingPrices += 1;
+    if (quote?.source === 'google') googlePrices += 1;
     if (fundamental?.status.stale) staleFundamentals += 1;
     if (fundamental?.status.source === 'yahoo') fallbackFundamentals += 1;
     if (fundamental?.peRatio === null && fundamental.latestEarnings === null) {
@@ -98,7 +100,7 @@ export async function getPortfolio(): Promise<PortfolioResponse> {
       peRatio: fundamental?.peRatio ?? null,
       latestEarnings: fundamental?.latestEarnings ?? null,
       quoteStatus: {
-        source: quote ? (env.DATA_MODE === 'mock' ? 'mock' : 'yahoo') : null,
+        source: quote?.source ?? null,
         stale: quoteSnapshot.stale,
         ...(quote ? {} : { error: 'No price available for this symbol' }),
       },
@@ -112,6 +114,12 @@ export async function getPortfolio(): Promise<PortfolioResponse> {
   if (missingPrices > 0 && missingPrices < holdings.length) {
     warnings.push(
       `${missingPrices} of ${holdings.length} holdings have no live price. Totals exclude them.`,
+    );
+  }
+
+  if (googlePrices > 0) {
+    warnings.push(
+      'Yahoo Finance is not answering. Prices come from Google Finance and refresh every few minutes.',
     );
   }
 

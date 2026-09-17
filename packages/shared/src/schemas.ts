@@ -39,6 +39,7 @@ export const quoteSchema = z.object({
   quotedAt: z.string().nullable(),
   trailingPE: z.number().finite().nullable(),
   trailingEps: z.number().finite().nullable(),
+  source: dataSourceSchema,
 });
 
 export const fundamentalsSchema = z.object({

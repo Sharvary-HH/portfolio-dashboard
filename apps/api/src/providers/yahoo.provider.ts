@@ -52,6 +52,7 @@ function toQuote(raw: RawQuote): Quote | null {
     quotedAt: isoOrNull(raw.regularMarketTime),
     trailingPE: finiteOrNull(raw.trailingPE),
     trailingEps: finiteOrNull(raw.epsTrailingTwelveMonths),
+    source: 'yahoo',
   };
 }
 

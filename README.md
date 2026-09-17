@@ -21,6 +21,8 @@ per-sector subtotals and a grand total. Gains are green, losses are red.
 - Stacked cards instead of a table below 768px, light and dark themes, keyboard-operable throughout
 - Degrades instead of failing: stale values are flagged per cell, warnings explain what is missing,
   and the last good data stays on screen when the API goes away
+- Falls back to Google Finance for prices when Yahoo blocks the server, which is what happens on
+  cloud hosts
 - `DATA_MODE=mock` runs the whole thing with simulated prices and no network access
 
 ## Tech stack
@@ -92,6 +94,7 @@ small random walk on every poll.
 | `DATA_MODE` | `live` | `live` or `mock` |
 | `QUOTE_TTL_SECONDS` | `15` | How long a batch of quotes stays fresh |
 | `FUNDAMENTALS_TTL_SECONDS` | `21600` | How long P/E and earnings stay fresh (6 hours) |
+| `GOOGLE_PRICE_TTL_SECONDS` | `300` | How long a Google-scraped price stays fresh, used when Yahoo blocks the server |
 | `STALE_MAX_AGE_SECONDS` | `86400` | How long a cached value may still be served as stale |
 | `SYMBOL_TTL_SECONDS` | `86400` | How long a resolved Yahoo symbol is reused |
 | `SYMBOL_RETRY_SECONDS` | `900` | Cooldown before retrying a symbol lookup that found nothing |
@@ -259,9 +262,12 @@ docker run -p 4000:4000 -e CORS_ORIGIN=https://your-app.vercel.app portfolio-api
 
 ### A warning about cloud IPs
 
-Datacentre IPs are far more likely to be rate-limited by Yahoo or served a cookie-consent page by
-Google than a home connection, and the app will then show stale values and warnings rather than
-fresh prices. If a demo has to be reliable, deploy the API with `DATA_MODE=mock`.
+Datacentre IPs are treated far more harshly than a home connection. On Render, Yahoo returns
+`429 Too Many Requests` on every crumb request, permanently — so the deployed API takes its prices
+from Google Finance instead, on a 5-minute TTL, and says so in `meta.warnings`. Prices are a few
+minutes old in that mode rather than 15 seconds, and `status.quote.source` reads `google`.
+
+If Google starts refusing as well, deploy with `DATA_MODE=mock` for a demo that cannot break.
 
 ## Limitations
 
