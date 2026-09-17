@@ -1,0 +1,38 @@
+{
+  "name": "portfolio-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run build -w @portfolio/shared && concurrently -n shared,api,web -c gray,cyan,magenta \"npm run dev -w @portfolio/shared\" \"npm run dev -w @portfolio/api\" \"npm run dev -w @portfolio/web\"",
+    "build": "npm run build -w @portfolio/shared && npm run build -w @portfolio/api && npm run build -w @portfolio/web",
+    "start": "concurrently -n api,web -c cyan,magenta \"npm run start -w @portfolio/api\" \"npm run start -w @portfolio/web\"",
+    "lint": "eslint packages/shared/src packages/shared/tests apps/api/src apps/api/tests scripts && npm run lint -w @portfolio/web",
+    "typecheck": "npm run typecheck -w @portfolio/shared && npm run typecheck -w @portfolio/api && npm run typecheck -w @portfolio/web",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "format": "prettier --write \"**/*.{ts,tsx,js,mjs,json,css,md}\"",
+    "import:excel": "tsx scripts/import-excel.ts"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "@types/node": "^20.19.9",
+    "concurrently": "^9.1.2",
+    "eslint": "^9.18.0",
+    "eslint-config-prettier": "^9.1.2",
+    "jsdom": "^26.1.0",
+    "prettier": "^3.4.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.70.0",
+    "vitest": "^3.0.5",
+    "xlsx": "^0.18.5"
+  },
+  "engines": {
+    "node": ">=20.9.0"
+  }
+}
