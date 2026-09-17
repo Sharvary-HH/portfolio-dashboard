@@ -40,7 +40,7 @@ in its warnings banner. Run it locally for the full 15-second Yahoo path.
 
 | Layer | Choice |
 |---|---|
-| Frontend | Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS v4, TanStack Table v8, Recharts, next-themes, Unica One + Prompt |
+| Frontend | Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS v4, TanStack Table v8, Recharts, next-themes, Amethysta + Prompt |
 | Backend | Node.js, Express, TypeScript, yahoo-finance2, axios + cheerio, zod, p-limit, pino |
 | Shared | Types, zod schemas, calculations and formatters used by both sides |
 | Tooling | npm workspaces, vitest, supertest, Testing Library, ESLint, Prettier |
@@ -279,6 +279,12 @@ from Google Finance instead, on a 5-minute TTL, and says so in `meta.warnings`. 
 minutes old in that mode rather than 15 seconds, and `status.quote.source` reads `google`.
 
 If Google starts refusing as well, deploy with `DATA_MODE=mock` for a demo that cannot break.
+
+## Further reading
+
+- [TECHNICAL_NOTES.md](TECHNICAL_NOTES.md) — the design decisions and trade-offs, kept to two pages
+- [docs/challenges.md](docs/challenges.md) — the longer account of what broke during the build and
+  how each problem was solved
 
 ## Limitations
 

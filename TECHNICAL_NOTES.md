@@ -1,5 +1,8 @@
 # Technical notes
 
+A longer, narrative account of the same problems — including the first attempts that did not work —
+is in [docs/challenges.md](docs/challenges.md).
+
 ## 1. No official API on either source
 
 Yahoo Finance and Google Finance both dropped their public APIs years ago. Quotes come from
