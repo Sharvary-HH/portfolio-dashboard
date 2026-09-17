@@ -70,14 +70,14 @@ function PortfolioTrendChartBase({
     <section className="card flex flex-col gap-4 p-4 sm:p-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h2 className="font-display text-sm font-bold tracking-tight">Portfolio value today</h2>
+          <h2 className="font-display text-base tracking-wide">Portfolio value today</h2>
           <p className="text-xs text-ink-soft">
             Recorded on every refresh since the service started
           </p>
         </div>
 
         <div className="text-right">
-          <p className="numeric font-display text-lg font-bold">{formatCurrencyWhole(last)}</p>
+          <p className="numeric text-lg font-semibold">{formatCurrencyWhole(last)}</p>
           <p
             className="numeric text-xs"
             style={{ color: movement === null ? undefined : rising ? ink.gain : ink.loss }}

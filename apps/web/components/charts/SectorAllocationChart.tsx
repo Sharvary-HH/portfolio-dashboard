@@ -8,7 +8,7 @@ import {
   formatSignedPercent,
   type SectorSummary,
 } from '@portfolio/shared';
-import { CHART_INK, hueFor } from './palette';
+import { CHART_INK, rampStep } from './palette';
 import { useChartMode } from './useChartMode';
 import { cn } from '@/lib/cn';
 
@@ -25,30 +25,30 @@ function SectorAllocationChartBase({ sectors }: { sectors: SectorSummary[] }) {
   const [activeSector, setActiveSector] = useState<string | null>(null);
 
   const slices = useMemo<Slice[]>(() => {
-    const values = sectors.map((sector) => ({
-      sector: sector.sector,
-      value: sector.totalPresentValue ?? sector.totalInvestment,
-      gainLossPercent: sector.gainLossPercent,
-    }));
+    const values = sectors
+      .map((sector) => ({
+        sector: sector.sector,
+        value: sector.totalPresentValue ?? sector.totalInvestment,
+        gainLossPercent: sector.gainLossPercent,
+      }))
+      .sort((a, b) => b.value - a.value);
 
     const total = values.reduce((sum, item) => sum + item.value, 0);
 
     return values.map((item, index) => ({
       ...item,
       share: total === 0 ? 0 : (item.value / total) * 100,
-      color: hueFor(mode, index),
+      color: rampStep(mode, index),
     }));
   }, [mode, sectors]);
 
-  const focused =
-    slices.find((slice) => slice.sector === activeSector) ??
-    [...slices].sort((a, b) => b.value - a.value)[0];
+  const focused = slices.find((slice) => slice.sector === activeSector) ?? slices[0];
 
   return (
     <section className="card flex flex-col gap-4 p-4 sm:p-5">
       <div>
-        <h2 className="font-display text-sm font-bold tracking-tight">Allocation by sector</h2>
-        <p className="text-xs text-ink-soft">Share of present value</p>
+        <h2 className="font-display text-base tracking-wide">Allocation by sector</h2>
+        <p className="text-xs text-ink-soft">Share of present value, largest first</p>
       </div>
 
       <div className="flex flex-col items-center gap-5 sm:flex-row">
@@ -77,7 +77,7 @@ function SectorAllocationChartBase({ sectors }: { sectors: SectorSummary[] }) {
 
           <div className="pointer-events-none absolute inset-0 grid place-items-center text-center">
             <div>
-              <p className="numeric font-display text-base font-bold">
+              <p className="numeric text-base font-semibold">
                 {formatCompactCurrency(focused?.value ?? null)}
               </p>
               <p className="max-w-24 truncate text-[0.7rem] text-ink-soft">

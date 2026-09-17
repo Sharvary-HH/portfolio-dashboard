@@ -54,7 +54,7 @@ function Card({
       <div>
         <p
           className={cn(
-            'numeric font-display text-xl font-bold tracking-tight',
+            'numeric text-xl font-semibold tracking-tight',
             tone === 'gain' && 'text-gain',
             tone === 'loss' && 'text-loss',
           )}

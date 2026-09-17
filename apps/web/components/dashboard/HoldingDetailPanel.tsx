@@ -51,7 +51,7 @@ export function HoldingDetailPanel({
   if (!holding) {
     return (
       <aside className="card hidden h-fit flex-col gap-2 p-5 xl:sticky xl:top-20 xl:flex">
-        <h2 className="font-display text-sm font-bold tracking-tight">Details</h2>
+        <h2 className="font-display text-base tracking-wide">Details</h2>
         <p className="text-xs text-ink-soft">
           Pick a holding from the table or the movers list to see its full breakdown here.
         </p>
@@ -68,7 +68,7 @@ export function HoldingDetailPanel({
       <div className="flex items-start gap-3">
         <TickerAvatar name={holding.name} className="size-10 text-xs" />
         <div className="min-w-0 flex-1">
-          <h2 className="font-display text-sm font-bold tracking-tight">{holding.name}</h2>
+          <h2 className="font-display text-base tracking-wide">{holding.name}</h2>
           <p className="numeric text-xs text-ink-faint">
             {holding.exchangeCode} · {holding.exchange} · {holding.sector}
           </p>
@@ -79,7 +79,7 @@ export function HoldingDetailPanel({
       </div>
 
       <div className="rounded-xl bg-muted px-3 py-3">
-        <p className="numeric font-display text-2xl font-bold">{formatCurrency(holding.cmp)}</p>
+        <p className="numeric text-2xl font-semibold">{formatCurrency(holding.cmp)}</p>
         <p className={cn('numeric text-xs', isUp ? 'text-gain' : 'text-loss')}>
           {formatSignedPercent(holding.dayChangePercent)} today
         </p>

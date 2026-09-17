@@ -1,16 +1,16 @@
-export const SECTOR_HUES = {
-  light: ['#2a78d6', '#eb6834', '#1baf7a', '#eda100', '#e87ba4', '#008300'],
-  dark: ['#3987e5', '#d95926', '#199e70', '#c98500', '#d55181', '#008300'],
+export const SECTOR_RAMP = {
+  light: ['#612634', '#7f3947', '#9b4c5b', '#b26875', '#c48792', '#d4a6b0'],
+  dark: ['#f0c8ce', '#e4a3ac', '#d4808d', '#bf6472', '#a34d5c', '#833c49'],
 } as const;
 
 export const CHART_INK = {
-  light: { axis: '#5b6068', grid: '#dddcd5', surface: '#ffffff', gain: '#0b7a55', loss: '#b4331f' },
-  dark: { axis: '#9aa1ad', grid: '#262a32', surface: '#14171d', gain: '#3ecf8e', loss: '#ff7a68' },
+  light: { axis: '#6f6157', grid: '#e8dcd7', surface: '#ffffff', gain: '#4e6853', loss: '#b04e60' },
+  dark: { axis: '#b9a99d', grid: '#3b3129', surface: '#241d18', gain: '#a2ae9d', loss: '#e4909c' },
 } as const;
 
-export type ChartMode = keyof typeof SECTOR_HUES;
+export type ChartMode = keyof typeof SECTOR_RAMP;
 
-export function hueFor(mode: ChartMode, index: number): string {
-  const hues = SECTOR_HUES[mode];
-  return hues[index % hues.length] as string;
+export function rampStep(mode: ChartMode, index: number): string {
+  const steps = SECTOR_RAMP[mode];
+  return steps[Math.min(index, steps.length - 1)] as string;
 }

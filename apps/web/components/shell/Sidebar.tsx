@@ -27,9 +27,7 @@ export function Sidebar({ active, onSelect, totalValue, holdingCount }: SidebarP
         <span className="grid size-9 place-items-center rounded-xl bg-rail-active text-sm font-bold text-white">
           PD
         </span>
-        <span className="font-display text-sm font-bold tracking-tight text-white">
-          Portfolio desk
-        </span>
+        <span className="font-display text-base tracking-wide text-white">Portfolio desk</span>
       </div>
 
       <div className="mt-6 rounded-2xl bg-white/5 px-3 py-3">
@@ -37,7 +35,7 @@ export function Sidebar({ active, onSelect, totalValue, holdingCount }: SidebarP
           <Wallet aria-hidden className="size-3.5" />
           Portfolio value
         </p>
-        <p className="numeric mt-1 font-display text-lg font-bold text-white">
+        <p className="numeric mt-1 text-lg font-semibold text-white">
           {formatCompactCurrency(totalValue)}
         </p>
         <p className="numeric text-[0.7rem] text-rail-ink">{holdingCount} holdings</p>

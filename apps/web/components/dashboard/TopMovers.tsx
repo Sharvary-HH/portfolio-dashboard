@@ -26,7 +26,7 @@ function MoverList({
 }) {
   return (
     <div className="card flex flex-col gap-3 p-4">
-      <h3 className="flex items-center gap-1.5 font-display text-sm font-bold tracking-tight">
+      <h3 className="flex items-center gap-1.5 font-display text-base tracking-wide">
         <span
           className={cn(
             'grid size-6 place-items-center rounded-lg',

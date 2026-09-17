@@ -149,33 +149,42 @@ number.
 
 ## 9. Design plan
 
-**Layout concept:** an app shell, not a page — a dark navy rail on the left carrying the portfolio
-value and section switcher, a sticky top bar holding search, market status, the live countdown and
-the refresh controls, and a work area of white cards on a cool grey canvas. Overview stacks four
-stat tiles, a portfolio-value chart, best and worst performers, the two sector charts, and finally
-the full holdings table at full width, with a details rail on the right that fills in when a row is
-picked.
+**Layout concept:** an app shell, not a page — a dark brown rail on the left carrying the portfolio
+value and section switcher, a sticky top bar with search, market status, the live countdown and the
+refresh controls, and a work area of cards on a warm off-white canvas. Overview stacks four stat
+tiles, the portfolio-value chart, best and worst performers and the two sector charts, with a
+details rail on the right; the holdings table runs full width beneath them.
 
-**Colour tokens** (light / dark): canvas `#f4f6fb` / `#0b0d17`, surface `#ffffff` / `#141827`, rule
-`#e7eaf3` / `#252b40`, ink `#121826` / `#eef0f6`, brand indigo `#2f3bb3` / `#7d88ef`, rail `#1b1f43`
-/ `#10131f`, gain `#0f9b6c` / `#35d39a`, loss `#d1453b` / `#ff6f63`, accent `#b7791f` / `#e2a94b`.
-Each of gain, loss, accent and brand also has a soft tint used for pills, icon chips and the flash
-animation. Gains and losses keep a sign and an arrow, so colour is never the only signal.
+**Colour tokens** are derived from a four-colour "pastel garden" palette (`#C75F71` dusty rose,
+`#F0B8B8` pale pink, `#A2AE9D` sage, `#54463A` brown). The raw swatches are too light to carry text,
+so each role uses a step measured against its surface rather than the swatch itself:
 
-**Type:** Plus Jakarta Sans for headings, section titles and every headline figure; Inter for body,
-labels and table numbers. Numbers carry `font-variant-numeric: tabular-nums`, which is what stops
-the columns twitching on each poll. Both are loaded through `next/font`.
+| Role | Light | Dark | Contrast |
+|---|---|---|---|
+| Canvas / surface | `#f7f2f0` / `#ffffff` | `#191411` / `#241d18` | — |
+| Ink | `#3a302a` | `#f3ebe5` | 12.8 : 1 |
+| Brand, rail | `#54463a` | `#d8c3ae` | 9.1 : 1 |
+| Gain | `#4e6853` | `#a2ae9d` | 6.1 / 7.2 : 1 |
+| Loss | `#b04e60` | `#e4909c` | 5.1 / 6.9 : 1 |
+| Accent | `#8a6a3a` | `#d9a85e` | 5.0 / 7.7 : 1 |
 
-**Cards over rules:** every block is a 16px-radius card with a hairline border and a two-layer
-shadow, which is what gives the page depth without heavy chrome. Holdings get a coloured initials
-avatar keyed off the name hash, so rows are scannable without logo assets.
+Gain is the sage family deepened, loss the rose family deepened, and the brand is the brown, so the
+semantic colours never compete with the interface colour. Both also carry a sign and an arrow, so
+colour is never the only signal.
 
-The chart palette is the eight-hue categorical set from the design reference, first six slots,
-checked with the palette validator in both modes: worst adjacent CVD ΔE 9.1 light / 8.4 dark,
-normal-vision ΔE 19.6 / 19.3, both above the floors. Three light-mode hues fall below 3:1 against
-white, so the donut ships a labelled legend with percentages and returns rather than relying on the
-wedges alone. The gain/loss bars use the diverging gain/loss tokens with a zero reference line, and
-the value chart is a single-series area in whichever of the two the session is trending.
+**The donut is a sequential ramp, not a categorical palette.** Six warm hues from one family cannot
+be told apart: the validator put the worst adjacent pair at ΔE 4.9 for protanopia and 13.8 for
+normal vision, well under the floors. Rather than invent cold hues the palette does not contain, the
+sectors are sorted largest first and coloured with a single-hue rose ramp
+(`#612634`→`#d4a6b0` light, reversed for dark), which passes the ordinal checks in both modes:
+lightness monotone, every adjacent gap ≥ 0.06, light end above the 2:1 contrast floor, hue spread
+4°. Magnitude is the encoding, and the legend names every sector with its share and return.
+
+**Type:** Unica One for headings and the wordmark; Prompt (300–600) for everything else. Prompt has
+no `tnum` feature — measured, eight `1`s render at 57px against 107px for eight `0`s — so
+`tabular-nums` cannot hold the columns steady. Instead the holdings table is `table-fixed` with
+percentage column widths summing to 100, which pins every column so a price tick can never reflow
+the layout. Numbers are right-aligned inside those fixed cells.
 
 ## 10. With more time
 

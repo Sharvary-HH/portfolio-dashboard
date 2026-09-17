@@ -89,7 +89,7 @@ export function PortfolioTable({ portfolio, query, selectedId, onSelect }: Portf
     <section aria-label="Holdings" className="flex flex-col gap-3">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="font-display text-sm font-bold tracking-tight">Holdings</h2>
+          <h2 className="font-display text-base tracking-wide">Holdings</h2>
           <p className="numeric text-xs text-ink-soft">
             {rows.length} of {portfolio.rows.length} shown, grouped by sector
           </p>
@@ -105,7 +105,7 @@ export function PortfolioTable({ portfolio, query, selectedId, onSelect }: Portf
         </p>
       ) : (
         <div className="card hidden overflow-x-auto md:block">
-          <table className="w-full min-w-5xl border-collapse text-sm">
+          <table className="w-full min-w-5xl table-fixed border-collapse text-sm">
             <thead className="sticky top-0 z-20 bg-surface">
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id} className="border-b border-rule">

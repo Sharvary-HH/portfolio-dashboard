@@ -31,39 +31,39 @@ export const portfolioColumns = [
         </span>
       </span>
     ),
-    meta: { align: 'left', sticky: true, width: 'w-60' },
+    meta: { align: 'left', sticky: true, width: 'w-[19%]' },
   }),
   helper.accessor('purchasePrice', {
     header: 'Purchase price',
     cell: (info) => formatCurrency(info.getValue()),
-    meta: { align: 'right', width: 'w-28' },
+    meta: { align: 'right', width: 'w-[8%]' },
   }),
   helper.accessor('quantity', {
     header: 'Qty',
     cell: (info) => formatQuantity(info.getValue()),
-    meta: { align: 'right', width: 'w-16' },
+    meta: { align: 'right', width: 'w-[5%]' },
   }),
   helper.accessor('investment', {
     header: 'Investment',
     cell: (info) => formatCurrency(info.getValue()),
-    meta: { align: 'right', width: 'w-32' },
+    meta: { align: 'right', width: 'w-[10%]' },
   }),
   helper.accessor('portfolioPercent', {
     header: 'Portfolio',
     cell: (info) => formatPercent(info.getValue()),
-    meta: { align: 'right', width: 'w-20' },
+    meta: { align: 'right', width: 'w-[7%]' },
   }),
   helper.accessor('exchangeCode', {
     header: 'NSE/BSE',
     cell: (info) => (
-      <span className="flex items-center justify-end gap-1.5">
+      <span className="flex items-center justify-end gap-1.5 whitespace-nowrap">
         <span className="numeric">{info.getValue()}</span>
         <span className="rounded-md bg-muted px-1.5 py-0.5 text-[0.6rem] font-medium tracking-wide text-ink-faint">
           {info.row.original.exchange}
         </span>
       </span>
     ),
-    meta: { align: 'right', width: 'w-28' },
+    meta: { align: 'right', width: 'w-[10%]' },
   }),
   helper.accessor('cmp', {
     header: 'CMP',
@@ -74,19 +74,19 @@ export const portfolioColumns = [
         status={info.row.original.status.quote}
       />
     ),
-    meta: { align: 'right', width: 'w-28' },
+    meta: { align: 'right', width: 'w-[9%]' },
   }),
   helper.accessor('presentValue', {
     header: 'Present value',
     cell: (info) => formatCurrency(info.getValue()),
-    meta: { align: 'right', width: 'w-32' },
+    meta: { align: 'right', width: 'w-[10%]' },
   }),
   helper.accessor('gainLoss', {
     header: 'Gain / loss',
     cell: (info) => (
       <GainLossCell value={info.getValue()} percent={info.row.original.gainLossPercent} />
     ),
-    meta: { align: 'right', width: 'w-32' },
+    meta: { align: 'right', width: 'w-[11%]' },
   }),
   helper.accessor('peRatio', {
     header: 'P/E ratio',
@@ -96,7 +96,7 @@ export const portfolioColumns = [
         <StaleBadge status={info.row.original.status.fundamentals} />
       </span>
     ),
-    meta: { align: 'right', width: 'w-24' },
+    meta: { align: 'right', width: 'w-[5%]' },
   }),
   helper.accessor((row) => row.latestEarnings?.eps ?? null, {
     id: 'latestEarnings',
@@ -119,6 +119,6 @@ export const portfolioColumns = [
         </Tooltip>
       );
     },
-    meta: { align: 'right', width: 'w-32' },
+    meta: { align: 'right', width: 'w-[6%]' },
   }),
 ];

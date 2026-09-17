@@ -1,18 +1,18 @@
 import type { Metadata } from 'next';
-import { Inter, Plus_Jakarta_Sans } from 'next/font/google';
+import { Prompt, Unica_One } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
 import './globals.css';
 
-const inter = Inter({
+const prompt = Prompt({
   subsets: ['latin'],
-  weight: ['400', '500', '600'],
-  variable: '--font-inter',
+  weight: ['300', '400', '500', '600'],
+  variable: '--font-prompt',
 });
 
-const jakarta = Plus_Jakarta_Sans({
+const unicaOne = Unica_One({
   subsets: ['latin'],
-  weight: ['600', '700'],
-  variable: '--font-jakarta',
+  weight: ['400'],
+  variable: '--font-unica',
 });
 
 export const metadata: Metadata = {
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} ${jakarta.variable} font-sans antialiased`}>
+      <body className={`${prompt.variable} ${unicaOne.variable} font-sans antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
         </ThemeProvider>

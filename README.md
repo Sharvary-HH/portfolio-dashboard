@@ -40,7 +40,7 @@ in its warnings banner. Run it locally for the full 15-second Yahoo path.
 
 | Layer | Choice |
 |---|---|
-| Frontend | Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS v4, TanStack Table v8, Recharts, next-themes |
+| Frontend | Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS v4, TanStack Table v8, Recharts, next-themes, Unica One + Prompt |
 | Backend | Node.js, Express, TypeScript, yahoo-finance2, axios + cheerio, zod, p-limit, pino |
 | Shared | Types, zod schemas, calculations and formatters used by both sides |
 | Tooling | npm workspaces, vitest, supertest, Testing Library, ESLint, Prettier |
