@@ -1,11 +1,11 @@
 import { cn } from '@/lib/cn';
 
 const TONES = [
-  'bg-[#f7e3e6] text-[#a6465a] dark:bg-[#3a262a] dark:text-[#e4909c]',
-  'bg-[#e7eee7] text-[#41573f] dark:bg-[#26302a] dark:text-[#a2ae9d]',
-  'bg-[#f5e9dd] text-[#8a6a3a] dark:bg-[#362a1d] dark:text-[#d9a85e]',
-  'bg-[#efe7e1] text-[#54463a] dark:bg-[#332a23] dark:text-[#d8c3ae]',
-  'bg-[#fbe9ea] text-[#b04e60] dark:bg-[#3b2529] dark:text-[#efa2ac]',
+  'bg-[#e3f3f2] text-[#176b68] dark:bg-[#16302f] dark:text-[#5fc9c5]',
+  'bg-[#f3e8ef] text-[#7a4f6b] dark:bg-[#2b1f28] dark:text-[#c79cb6]',
+  'bg-[#fdf0df] text-[#8a5f2c] dark:bg-[#2b2113] dark:text-[#f4cca9]',
+  'bg-[#eef1f1] text-[#41565c] dark:bg-[#1f2f35] dark:text-[#b7c6ca]',
+  'bg-[#e7f1f4] text-[#2a6c7d] dark:bg-[#172c33] dark:text-[#7fc0d1]',
 ];
 
 function initialsOf(name: string): string {

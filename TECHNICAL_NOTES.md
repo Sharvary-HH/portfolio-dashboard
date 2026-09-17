@@ -150,39 +150,38 @@ number.
 ## 9. Design plan
 
 **Layout concept:** an app shell, not a page — a dark brown rail on the left carrying the portfolio
-value and section switcher, a sticky top bar with search, market status, the live countdown and the
-refresh controls, and a work area of cards on a warm off-white canvas. Overview stacks four stat
+value and section switcher, a sticky top bar with search and market status on the left, the pause and refresh
+controls with an inline countdown ring in the middle, and a ticking clock in the right corner, and a work area of cards on a warm off-white canvas. Overview stacks four stat
 tiles, the portfolio-value chart, best and worst performers and the two sector charts, with a
 details rail on the right; the holdings table runs full width beneath them.
 
-**Colour tokens** are derived from a four-colour "pastel garden" palette (`#C75F71` dusty rose,
-`#F0B8B8` pale pink, `#A2AE9D` sage, `#54463A` brown). The raw swatches are too light to carry text,
-so each role uses a step measured against its surface rather than the swatch itself:
+**Colour tokens** are derived from a four-colour "opal seashell" palette (`#3EBCB8` teal, `#B78BA5`
+mauve, `#F4CCA9` peach, `#DBDBDB` grey). The raw swatches are too light to carry text — the teal is
+2.3:1 on white, the peach 1.5:1 — so each role uses a step measured against its own surface:
 
 | Role | Light | Dark | Contrast |
 |---|---|---|---|
-| Canvas / surface | `#f7f2f0` / `#ffffff` | `#191411` / `#241d18` | — |
-| Ink | `#3a302a` | `#f3ebe5` | 12.8 : 1 |
-| Brand, rail | `#54463a` | `#d8c3ae` | 9.1 : 1 |
-| Gain | `#137333` | `#4ade80` | 6.0 / 9.5 : 1 |
-| Loss | `#c0271d` | `#f87171` | 5.9 / 6.0 : 1 |
-| Accent | `#8a6a3a` | `#d9a85e` | 5.0 / 7.7 : 1 |
+| Canvas / surface | `#f4f6f6` / `#ffffff` | `#101b1f` / `#16242a` | — |
+| Ink | `#1f2a2e` | `#edf2f2` | 14.7 : 1 |
+| Brand, rail accent | `#1f7f7c` | `#3ebcb8` | 4.8 / 6.9 : 1 |
+| Rail | `#14312f` | `#0c1519` | 7.5 : 1 for its text |
+| Gain | `#137333` | `#4ade80` | 6.0 / 9.1 : 1 |
+| Loss | `#c0271d` | `#f87171` | 5.9 / 5.8 : 1 |
+| Accent | `#8a5f2c` | `#f4cca9` | 5.6 / 10.7 : 1 |
 
 Gain and loss stay the conventional green and red — a portfolio table is the wrong place to be
-inventive, and the palette's own sage and rose read as decorative rather than directional. The warm
-family carries the interface instead (brown brand and rail, rose highlight), so the semantic colours
-never compete with it. Both also carry a sign and an arrow, so
-colour is never the only signal.
+inventive, and a palette's decorative colours read as ornament rather than direction. The teal,
+mauve and peach carry the interface instead, so the semantic colours never compete with them.
 
 **The donut is a sequential ramp, not a categorical palette.** Six warm hues from one family cannot
 be told apart: the validator put the worst adjacent pair at ΔE 4.9 for protanopia and 13.8 for
 normal vision, well under the floors. Rather than invent cold hues the palette does not contain, the
-sectors are sorted largest first and coloured with a single-hue rose ramp
-(`#612634`→`#d4a6b0` light, reversed for dark), which passes the ordinal checks in both modes:
+sectors are sorted largest first and coloured with a single-hue teal ramp
+(`#0a3a38`→`#79c2be` light, reversed for dark), which passes the ordinal checks in both modes:
 lightness monotone, every adjacent gap ≥ 0.06, light end above the 2:1 contrast floor, hue spread
-4°. Magnitude is the encoding, and the legend names every sector with its share and return.
+1°. Magnitude is the encoding, and the legend names every sector with its share and return.
 
-**Type:** Amethysta for headings and the wordmark; Prompt (300–600) for everything else. Prompt has
+**Type:** Amethysta, bold, for headings and the wordmark; Prompt (300–600) for everything else. Prompt has
 no `tnum` feature — measured, eight `1`s render at 57px against 107px for eight `0`s — so
 `tabular-nums` cannot hold the columns steady. Instead the holdings table is `table-fixed` with
 percentage column widths summing to 100, which pins every column so a price tick can never reflow

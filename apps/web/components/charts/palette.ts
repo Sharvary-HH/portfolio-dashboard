@@ -1,11 +1,11 @@
 export const SECTOR_RAMP = {
-  light: ['#612634', '#7f3947', '#9b4c5b', '#b26875', '#c48792', '#d4a6b0'],
-  dark: ['#f0c8ce', '#e4a3ac', '#d4808d', '#bf6472', '#a34d5c', '#833c49'],
+  light: ['#0a3a38', '#125552', '#1a706d', '#268c88', '#45a7a3', '#79c2be'],
+  dark: ['#a9dbd8', '#7ec6c2', '#57b0ac', '#369a96', '#237f7c', '#155f5c'],
 } as const;
 
 export const CHART_INK = {
-  light: { axis: '#6f6157', grid: '#e8dcd7', surface: '#ffffff', gain: '#137333', loss: '#c0271d' },
-  dark: { axis: '#b9a99d', grid: '#3b3129', surface: '#241d18', gain: '#4ade80', loss: '#f87171' },
+  light: { axis: '#5a6a70', grid: '#dbdbdb', surface: '#ffffff', gain: '#137333', loss: '#c0271d' },
+  dark: { axis: '#a8b7bb', grid: '#2a3d43', surface: '#16242a', gain: '#4ade80', loss: '#f87171' },
 } as const;
 
 export type ChartMode = keyof typeof SECTOR_RAMP;

@@ -1,12 +1,11 @@
 'use client';
 
-import { Pause, Play, RotateCw, Search } from 'lucide-react';
+import { Search } from 'lucide-react';
 import type { PortfolioResponse } from '@portfolio/shared';
-import { Button } from '@/components/ui/Button';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { MarketStatusBadge } from '@/components/dashboard/MarketStatusBadge';
 import { LiveClock } from './LiveClock';
-import { cn } from '@/lib/cn';
+import { RefreshControl } from './RefreshControl';
 
 interface TopBarProps {
   meta: PortfolioResponse['meta'] | null;
@@ -33,7 +32,7 @@ export function TopBar({
 }: TopBarProps) {
   return (
     <header className="sticky top-0 z-30 flex flex-wrap items-center gap-3 border-b border-rule bg-canvas/85 px-4 py-3 backdrop-blur sm:px-6">
-      <label className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-rule bg-surface px-3 py-2 sm:max-w-sm">
+      <label className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-rule bg-surface px-3 py-2 sm:max-w-xs">
         <Search aria-hidden className="size-4 shrink-0 text-ink-faint" />
         <span className="sr-only">Search holdings by name or code</span>
         <input
@@ -44,43 +43,29 @@ export function TopBar({
         />
       </label>
 
-      <div className="flex flex-wrap items-center gap-2">
-        {meta?.dataMode === 'mock' ? (
-          <span className="rounded-lg bg-accent-soft px-2.5 py-1.5 text-xs font-medium text-accent">
-            Demo data
-          </span>
-        ) : null}
+      <MarketStatusBadge state={meta?.marketState ?? 'UNKNOWN'} />
 
-        <MarketStatusBadge state={meta?.marketState ?? 'UNKNOWN'} />
+      {meta?.dataMode === 'mock' ? (
+        <span className="rounded-lg bg-accent-soft px-2.5 py-1.5 text-xs font-medium text-accent">
+          Demo data
+        </span>
+      ) : null}
 
-        <LiveClock
-          lastUpdated={lastUpdated}
+      <div className="ml-auto flex items-center gap-3">
+        <RefreshControl
           secondsUntilNextRefresh={secondsUntilNextRefresh}
           intervalSeconds={Math.round((meta?.refreshIntervalMs ?? 15000) / 1000)}
           isRefreshing={isRefreshing}
           isPaused={isPaused}
+          onRefresh={onRefresh}
+          onTogglePause={onTogglePause}
         />
 
-        <span aria-hidden className="hidden h-6 w-px bg-rule sm:block" />
-
-        <Button
-          onClick={onTogglePause}
-          aria-label={isPaused ? 'Resume live updates' : 'Pause live updates'}
-        >
-          {isPaused ? (
-            <Play aria-hidden className="size-3.5" />
-          ) : (
-            <Pause aria-hidden className="size-3.5" />
-          )}
-          <span className="hidden sm:inline">{isPaused ? 'Resume' : 'Pause'}</span>
-        </Button>
-
-        <Button variant="brand" onClick={onRefresh} disabled={isRefreshing}>
-          <RotateCw aria-hidden className={cn('size-3.5', isRefreshing && 'animate-spin')} />
-          <span className="hidden sm:inline">Refresh</span>
-        </Button>
-
         <ThemeToggle />
+
+        <span aria-hidden className="hidden h-8 w-px bg-rule sm:block" />
+
+        <LiveClock lastUpdated={lastUpdated} />
       </div>
     </header>
   );
